@@ -13,3 +13,5 @@ whoosh_index/*
 .templates/
 .templates
 venv/*
+.vscode/
+*/__pycache__/*
