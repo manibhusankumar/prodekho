@@ -1,0 +1,15 @@
+*.log.*
+*.log
+*.db
+db/
+test_db/
+.vagrant
+*.sublime-project
+*.sublime-workspace
+media/*
+.idea/
+.idea/*
+whoosh_index/*
+.templates/
+.templates
+venv/*
