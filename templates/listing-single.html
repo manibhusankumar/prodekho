@@ -1,0 +1,517 @@
+{#{% extends 'base.html' %}#}
+{#{% block content %}#}
+{##}
+{#    {% load static %}#}
+{#    <style>#}
+{#        button {#}
+{#            height: 30px;#}
+{#            background: #3095e9;#}
+{#            border: none;#}
+{#            color: white;#}
+{#            font-size: 1.25em;#}
+{#            font-family: 'Nanum Gothic';#}
+{#            border-radius: 4px;#}
+{#            cursor: pointer;#}
+{#        }#}
+{##}
+{#        button:hover {#}
+{#            border: 2px solid black;#}
+{#        }#}
+{#    </style>#}
+{##}
+{#    <div id="wrapper">#}
+{##}
+{#        <!-- content -->#}
+{#        <div class="content">#}
+{##}
+{##}
+{#            <!-- section -->#}
+{#            <div class="grid-item-holder gallery-items gisp fl-wrap">#}
+{##}
+{#                <!-- gallery-item-->#}
+{#                <div class="gallery-item for_sale">#}
+{##}
+{#                    <!-- listing-item -->#}
+{#                    <div>#}
+{#                        <div class="listing-item">#}
+{#                            <article class="geodir-category-listing fl-wrap">#}
+{#                                <div class="geodir-category-img fl-wrap">#}
+{#                                    <a href="#" class="geodir-category-img_item">#}
+{#                                        <img src="{{ listing.room_image.url }}" alt="">#}
+{#                                        <div class="overlay"></div>#}
+{#                                    </a>#}
+{#                                    <div class="geodir-category-location">#}
+{#                                        <a href="#" class="single-map-item tolt" data-newlatitude="40.72956781"#}
+{#                                           data-newlongitude="-73.99726866" data-microtip-position="top-left"#}
+{#                                           data-tooltip="On the map"><i class="fas fa-map-marker-alt"></i>#}
+{#                                            <span> {{ listing.address }}</span></a>#}
+{#                                    </div>#}
+{#                                            <ul class="list-single-opt_header_cat">#}
+{#                                                <ul class="list-single-opt_header_cat">#}
+{#                                                     {{ p.li_title|safe }}#}
+{##}
+{#                                                </ul>#}
+{#                                            </ul>#}
+{##}
+{#                                    <ul class="list-single-opt_header_cat">#}
+{#                                        <li><a href="#" class="cat-opt blue-bg">{{ listing.type|safe }}</a></li>#}
+{#                                                <li><a href="#" class="cat-opt color-bg">Apartment</a></li>#}
+{#                                    </ul>#}
+{##}
+{#                                    <a href="#" class="geodir_save-btn tolt" data-microtip-position="left"#}
+{#                                       data-tooltip="Save"><span><i class="fal fa-heart"></i></span></a>#}
+{#                                    <a href="#" class="compare-btn tolt" data-microtip-position="left"#}
+{#                                       data-tooltip="Compare"><span><i class="fal fa-random"></i></span></a>#}
+{#                                    <div class="geodir-category-listing_media-list">#}
+{#                                        <span><i class="fas fa-camera"></i> 8</span>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <div class="geodir-category-content fl-wrap">#}
+{#                                    <h3 class="title-sin_item"><a href="#">#}
+{#                                        {{ listing.title|safe }}</a></h3>#}
+{#                                    <div class="geodir-category-content_price">₹ {{ listing.price }}</div>#}
+{#                                    <p>{{ listing.room_details|truncatechars:100 }}</p>#}
+{##}
+{##}
+{#                                    <div class=" add-list-tags fl-wrap">#}
+{#                                        <!-- Checkboxes -->#}
+{#                                        <ul class="fl-wrap filter-tags no-list-style ds-tg">#}
+{#                                            <li>#}
+{#                                                <input id="check-2aaa5" type="checkbox" name="air_conditioner"#}
+{#                                                       checked>#}
+{#                                                <label for="check-2aaa5">Air conditioner</label>#}
+{#                                            </li>#}
+{#                                            <li>#}
+{#                                                <input id="check-2bb5" type="checkbox" name="tv_inside" checked>#}
+{#                                                <label for="check-2bb5">Tv Inside</label>#}
+{#                                            </li>#}
+{#                                            <li>#}
+{#                                                <input id="check-2dd5" type="checkbox" name="ceramic_bath">#}
+{#                                                <label for="check-2dd5"> Ceramic bath</label>#}
+{#                                            </li>#}
+{#                                            <li>#}
+{#                                                <input id="check-2cc5" type="checkbox" name="microwave" checked>#}
+{#                                                <label for="check-2cc5">Microwave</label>#}
+{#                                            </li>#}
+{#                                        </ul>#}
+{#                                        <!-- Checkboxes end -->#}
+{#                                    </div>#}
+{#                                    <div class=" add-list-tags fl-wrap">#}
+{#                                        <!-- Checkboxes -->#}
+{##}
+{#                                        <ul class="fl-wrap filter-tags no-list-style ds-tg">#}
+{#                                            <li>#}
+{#                                                <input id="check-aaa5" type="checkbox" name="wi_fi"#}
+{#                                                        {% if listing.wi_fi %}#}
+{#                                                       checked {% endif %}>#}
+{#                                                <label for="check-aaa5"> Wi Fi</label>#}
+{#                                            </li>#}
+{#                                            <li>#}
+{#                                                <input id="check-bb5" type="checkbox" name="pool" {% if listing.pool %}#}
+{#                                                       checked {% endif %}>#}
+{#                                                <label for="check-bb5">Pool</label>#}
+{#                                            </li>#}
+{#                                            <li>#}
+{#                                                <input id="check-dd5" type="checkbox" name="security"#}
+{#                                                        {% if listing.security %} checked {% endif %} >#}
+{#                                                <label for="check-dd5"> Security</label>#}
+{#                                            </li>#}
+{#                                            <li>#}
+{#                                                <input id="check-cc5" type="checkbox" name="laundry_room">#}
+{#                                                <label for="check-cc5"> Laundry Room</label>#}
+{#                                            </li>#}
+{#                                            <li>#}
+{#                                                <input id="check-ff5" type="checkbox" name="equipped_kitchen"#}
+{#                                                        {% if listing.equipped_kitchen %} checked {% endif %}>#}
+{#                                                <label for="check-ff5"> Equipped Kitchen</label>#}
+{#                                            </li>#}
+{#                                            <li>#}
+{#                                                <input id="check-c4" type="checkbox" name="air_conditioning"#}
+{#                                                        {% if listing.air_conditioning %} checked {% endif %}>#}
+{#                                                <label for="check-c4">Air Conditioning</label>#}
+{#                                            </li>#}
+{#                                            <li>#}
+{#                                                <input id="check-c18" type="checkbox" name="parking"#}
+{#                                                        {% if listing.parking %} checked {% endif %}>#}
+{#                                                <label for="check-c18">Parking</label>#}
+{#                                            </li>#}
+{#                                        </ul>#}
+{#                                        <!-- Checkboxes end -->#}
+{#                                    </div>#}
+{##}
+{#                                    <div class="geodir-category-content-details">#}
+{#                                        <ul>#}
+{#                                            <li><i class="fal fa-bed"></i><span>{{ listing.bedrooms }}</span></li>#}
+{#                                            <li><i class="fal fa-bath"></i><span>{{ listing.bathrooms }}</span></li>#}
+{#                                            <li><i class="fal fa-cube"></i><span>{{ listing.area }}</span></li>#}
+{#                                            <li><i class="far fa-users"></i><span>{{ listing.accommodation }}</span>#}
+{#                                            </li>#}
+{#                                            <li><i class="far fa-trees"></i><span>{{ listing.yard_size }}</span></li>#}
+{#                                            <li><i class="far fa-warehouse"></i><span>{{ listing.garage }}</span></li>#}
+{##}
+{#                                        </ul>#}
+{#                                    </div>#}
+{#                                    <div class="geodir-category-footer fl-wrap">#}
+{##}
+{#                                        <button>Booking</button>#}
+{#                                                <a href="agent-single.html" class="gcf-company"><img#}
+{#                                                        src="{{ p.author_image.url }}"#}
+{#                                                        alt=""><button class="cta  css-a9k1ap">Contact</button></a>#}
+{#                                        <div class="listing-rating card-popup-rainingvis tolt"#}
+{#                                             data-microtip-position="top" data-tooltip="Good"#}
+{#                                             data-starrating2="4"></div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </article>#}
+{#                        </div>#}
+{##}
+{#                    </div>#}
+{#                    <!-- listing-item end-->#}
+{##}
+{#                </div>#}
+{##}
+{##}
+{#            </div>#}
+{##}
+{#        </div>#}
+{#        <!-- content end -->#}
+{##}
+{##}
+{#    </div>#}
+{##}
+{#{% endblock %}#}
+{##}
+{##}
+{##}
+{#{{ redirect_to_login_immediately }}#}
+{##}
+
+
+{% extends 'base.html' %}
+{% block content %}
+    {% load static %}      <!-- wrapper  -->
+    <div id="wrapper">
+        <!-- content -->
+        <div class="content">
+            <!-- breadcrumbs-->
+            <div class="breadcrumbs fw-breadcrumbs sp-brd fl-wrap   top-smpar  ">
+                <div class="container">
+                    <div class="breadcrumbs-list">
+                        <a href="#">Home</a><a href="#">Properties</a> <span>Listing Single</span>
+                    </div>
+                    <div class="share-holder hid-share">
+                        <a href="#" class="share-btn showshare sfcs"> <i class="fas fa-share-alt"></i> Share </a>
+                        <div class="share-container  isShare"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- breadcrumbs end -->
+            <!-- col-list-wrap -->
+            <div class="gray-bg small-padding fl-wrap">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="post-container fl-wrap">
+                                <!-- article> -->
+                                <article class="post-article fl-wrap">
+                                    <div class="list-single-main-media fl-wrap">
+                                        <div class="single-slider-wrapper carousel-wrap fl-wrap">
+                                            <div class="single-slider fl-wrap carousel lightgallery">
+                                                <!--  slick-slide-item -->
+                                                <div class="slick-slide-item">
+                                                    <div class="box-item">
+                                                        <a href="{{ listing.room_image.url }}"
+                                                           class="gal-link popup-image"><i
+                                                                class="fal fa-search"></i></a>
+                                                        <img src="{{ listing.room_image.url }}" alt="">
+                                                    </div>
+                                                </div>
+                                                <!--  slick-slide-item end -->
+                                                <!--  slick-slide-item -->
+                                                <div class="slick-slide-item">
+                                                    <div class="box-item">
+                                                        <a href="{% static 'images/imptyroom.jpeg' %}"
+                                                           class="gal-link popup-image"><i
+                                                                class="fal fa-search"></i></a>
+                                                        <img src="{% static 'images/eksath.jpg' %}" alt="">
+                                                    </div>
+                                                </div>
+                                                <!--  slick-slide-item end -->
+                                                <!--  slick-slide-item -->
+                                                <div class="slick-slide-item">
+                                                    <div class="box-item">
+                                                        <a href="{% static 'images/omaxfromt.jpg' %}"
+                                                           class="gal-link popup-image"><i
+                                                                class="fal fa-search"></i></a>
+                                                        <img src="{% static 'images/jmd_it_megapolis-sector_48_gurgaon-gurgaon-jmd_group.webp' %}"
+                                                             alt="">
+                                                    </div>
+                                                </div>
+                                                <!--  slick-slide-item end -->
+                                            </div>
+                                            <div class="swiper-button-prev ssw-btn"><i class="fas fa-caret-left"></i>
+                                            </div>
+                                            <div class="swiper-button-next ssw-btn"><i class="fas fa-caret-right"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="list-single-main-item fl-wrap block_box">
+                                        <div class="single-article-header fl-wrap">
+                                            <h2 class="post-opt-title"><a href="">{{ listing.title|safe }}</a></h2>
+                                            <span class="fw-separator"></span>
+                                            <div class="clearfix"></div>
+                                            {#                                                    <div class="post-author"><a href="#"><img src="{{ blog.author_image.url }}" alt=""><span>By ,{{ blog.author_name }}</span></a></div>#}
+                                            <div class="post-opt">
+                                                <ul class="no-list-style">
+                                                    <li><i class="fal fa-bed"></i><span>{{ listing.bedrooms }}</span>
+                                                    </li>
+                                                    <li><i class="fal fa-bath"></i><span>{{ listing.bathrooms }}</span>
+                                                    </li>
+                                                    <li><i class="fal fa-cube"></i><span>{{ listing.area }}</span></li>
+                                                    <li>
+                                                        <i class="far fa-users"></i><span>{{ listing.accommodation }}</span>
+                                                    </li>
+                                                    <li>
+                                                        <input id="check-2aaa5" type="checkbox" name="air_conditioner"
+                                                               checked>
+                                                        <label for="check-2aaa5">Air conditioner</label>
+                                                    </li>
+                                                    <li>
+                                                        <input id="check-2bb5" type="checkbox" name="tv_inside" checked>
+                                                        <label for="check-2bb5">Tv Inside</label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <span class="fw-separator fl-wrap"></span>
+                                        <p> {{ listing.room_details|safe }}</p>
+
+                                        <p> {{ listing.details_text|safe }}</p>
+                                    </div>
+                                </article>
+                                <!-- article end -->
+                                <!--content-nav_holder-->
+                                <div class="content-nav_holder fl-wrap color-bg">
+                                    <div class="content-nav">
+                                        <ul>
+                                            <li>
+                                                <a href="#" class="ln"><i class="fal fa-long-arrow-left"></i><span>Prev <strong>- {{ listing.keywords }}</strong></span></a>
+                                                <div class="content-nav-media">
+                                                    <div class="bg" data-bg="{% static 'images/eksath.jpg' %}"></div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <a href="#" class="rn"><span>Next <strong>- {{ listing.city }}</strong></span>
+                                                    <i class="fal fa-long-arrow-right"></i></a>
+                                                <div class="content-nav-media">
+                                                    <div class="bg" data-bg="{% static 'images/garden.jpg' %}"></div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!--content-nav_holder end -->
+                                {#                                        <div class="list-single-main-container fl-wrap" style="margin-top: 30px;">#}
+                                {#                                            <!-- list-single-main-item -->#}
+                                {#                                            <div class="list-single-main-item fl-wrap" id="sec6">#}
+                                {#                                                <div class="list-single-main-item-title">#}
+                                {#                                                    <h3>Comments <span>2</span></h3>#}
+                                {#                                                </div>#}
+                                {#                                                <div class="list-single-main-item_content fl-wrap">#}
+                                {#                                                    <div class="reviews-comments-wrap fl-wrap">#}
+                                {#                                                        <!-- reviews-comments-item -->#}
+                                {#                                                        <div class="reviews-comments-item">#}
+                                {#                                                            <div class="review-comments-avatar">#}
+                                {#                                                                <img src="{%  static 'images/avatar/1.jpg'%}" alt="">#}
+                                {#                                                            </div>#}
+                                {#                                                            <div class="reviews-comments-item-text smpar">#}
+                                {#                                                                <div class="box-widget-menu-btn smact"><i class="far fa-ellipsis-h"></i></div>#}
+                                {#                                                                <div class="show-more-snopt-tooltip bxwt">#}
+                                {#                                                                    <a href="#"> <i class="fas fa-reply"></i> Reply</a>#}
+                                {#                                                                    <a href="#"> <i class="fas fa-exclamation-triangle"></i> Report </a>#}
+                                {#                                                                </div>#}
+                                {#                                                                <h4><a href="#">Liza Rose</a></h4>#}
+                                {#                                                                <div class="clearfix"></div>#}
+                                {#                                                                <p>" Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. "</p>#}
+                                {#                                                                <div class="reviews-comments-item-date"><span class="reviews-comments-item-date-item"><i class="far fa-calendar-check"></i>12 April 2018</span><a href="#" class="rate-review"><i class="fal fa-thumbs-up"></i>  Helpful Comment  <span>6</span> </a></div>#}
+                                {#                                                            </div>#}
+                                {#                                                        </div>#}
+                                {#                                                        <!--reviews-comments-item end-->#}
+                                {#                                                        <!-- reviews-comments-item -->#}
+                                {#                                                        <div class="reviews-comments-item">#}
+                                {#                                                            <div class="review-comments-avatar">#}
+                                {#                                                                <img src="{%  static 'images/avatar/1.jpg'%}" alt="">#}
+                                {#                                                            </div>#}
+                                {#                                                            <div class="reviews-comments-item-text smpar">#}
+                                {#                                                                <div class="box-widget-menu-btn smact"><i class="far fa-ellipsis-h"></i></div>#}
+                                {#                                                                <div class="show-more-snopt-tooltip bxwt">#}
+                                {#                                                                    <a href="#"> <i class="fas fa-reply"></i> Reply</a>#}
+                                {#                                                                    <a href="#"> <i class="fas fa-exclamation-triangle"></i> Report </a>#}
+                                {#                                                                </div>#}
+                                {#                                                                <h4><a href="#">Adam Koncy</a></h4>#}
+                                {#                                                                <div class="clearfix"></div>#}
+                                {#                                                                <p>" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc posuere convallis purus non cursus. Cras metus neque, gravida sodales massa ut. "</p>#}
+                                {#                                                                <div class="reviews-comments-item-date"><span class="reviews-comments-item-date-item"><i class="far fa-calendar-check"></i>03 December 2017</span><a href="#" class="rate-review"><i class="fal fa-thumbs-up"></i>   Helpful Comment <span>2</span> </a></div>#}
+                                {#                                                            </div>#}
+                                {#                                                        </div>#}
+                                {#                                                        <!--reviews-comments-item end-->#}
+                                {#                                                    </div>#}
+                                {#                                                </div>#}
+                                {#                                            </div>#}
+                                {#                                            <!-- list-single-main-item end -->#}
+                                {#                                            <!-- list-single-main-item -->#}
+                                {#                                            <div class="list-single-main-item fl-wrap" id="sec5">#}
+                                {#                                                <div class="list-single-main-item-title fl-wrap">#}
+                                {#                                                    <h3>Add Your Comment</h3>#}
+                                {#                                                </div>#}
+                                {#                                                <!-- Add Review Box -->#}
+                                {#                                                <div id="add-review" class="add-review-box">#}
+                                {#                                                    <div class="leave-rating-wrap">#}
+                                {#                                                    </div>#}
+                                {#                                                    <!-- Review Comment -->#}
+                                {#                                                    <form   class="add-comment custom-form">#}
+                                {#                                                        <fieldset>#}
+                                {#                                                            <div class="row">#}
+                                {#                                                                <div class="col-md-6">#}
+                                {#                                                                    <label>Your name* <span class="dec-icon"><i class="fas fa-user"></i></span></label>#}
+                                {#                                                                    <input   name="phone" type="text"    onClick="this.select()" value="">#}
+                                {#                                                                </div>#}
+                                {#                                                                <div class="col-md-6">#}
+                                {#                                                                    <label>Yourmail* <span class="dec-icon"><i class="fas fa-envelope"></i></span></label>#}
+                                {#                                                                    <input   name="reviewwname" type="text"    onClick="this.select()" value="">#}
+                                {#                                                                </div>#}
+                                {#                                                            </div>#}
+                                {#                                                            <textarea cols="40" rows="3" placeholder="Your Review:"></textarea>#}
+                                {#                                                        </fieldset>#}
+                                {#                                                        <button class="btn big-btn color-bg float-btn">Submit Comment <i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>#}
+                                {#                                                    </form>#}
+                                {#                                                </div>#}
+                                {#                                                <!-- Add Review Box / End -->#}
+                                {#                                            </div>#}
+                                {#                                            <!-- list-single-main-item end -->#}
+                                {#                                        </div>#}
+                            </div>
+                        </div>
+                        <!-- col-md 8 end -->
+                        <!--  sidebar-->
+                        <div class="col-md-4">
+                            <div class="box-widget-wrap fl-wrap fixed-bar">
+                                <!--box-widget-->
+                                <div class="box-widget fl-wrap">
+                                    <div class="search-widget fl-wrap">
+                                        <form action="#" class="fl-wrap custom-form">
+                                            <input name="se" id="se" type="text" class="search" placeholder="Search.."
+                                                   value=""/>
+                                            <button class="search-submit" id="submit_btn"><i class="far fa-search"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <!--box-widget end -->
+                                <!--box-widget-->
+                                {#                                        <div class="box-widget fl-wrap">#}
+                                {#                                            <div class="box-widget-title fl-wrap">Popular Posts</div>#}
+                                {#                                            <div class="box-widget-content fl-wrap">#}
+                                {#                                                <!--widget-posts-->#}
+                                {#                                                <div class="widget-posts  fl-wrap">#}
+                                {#                                                    <ul class="no-list-style">#}
+                                {#                                                        <li>#}
+                                {#                                                            <div class="widget-posts-img"><a href="blog-single.html"><img src="{%  static 'images/all/blog/1.jpg'%}" alt=""></a></div>#}
+                                {#                                                            <div class="widget-posts-descr">#}
+                                {#                                                                <h4><a href="listing-single.html">Nullam dictum felis</a></h4>#}
+                                {#                                                                <div class="geodir-category-location fl-wrap"><a href="#"><i class="fal fa-calendar"></i> 27 Mar 2020</a></div>#}
+                                {#                                                            </div>#}
+                                {#                                                        </li>#}
+                                {#                                                        <li>#}
+                                {#                                                            <div class="widget-posts-img"><a href="blog-single.html"><img src="{%  static 'images/all/blog/1.jpg'%}" alt=""></a></div>#}
+                                {#                                                            <div class="widget-posts-descr">#}
+                                {#                                                                <h4><a href="listing-single.html">Scrambled it to mak</a></h4>#}
+                                {#                                                                <div class="geodir-category-location fl-wrap"><a href="#"><i class="fal fa-calendar"></i> 12 May 2020</a></div>#}
+                                {#                                                            </div>#}
+                                {#                                                        </li>#}
+                                {#                                                        <li>#}
+                                {#                                                            <div class="widget-posts-img"><a href="blog-single.html"><img src="{%  static 'images/all/blog/1.jpg'%}" alt=""></a> </div>#}
+                                {#                                                            <div class="widget-posts-descr">#}
+                                {#                                                                <h4><a href="listing-single.html">Fermentum nis type</a></h4>#}
+                                {#                                                                <div class="geodir-category-location fl-wrap"><a href="#"><i class="fal fa-calendar"></i>22 Feb  2020</a></div>#}
+                                {#                                                            </div>#}
+                                {#                                                        </li>#}
+                                {#                                                        <li>#}
+                                {#                                                            <div class="widget-posts-img"><a href="blog-single.html"><img src="{%  static 'images/all/blog/1.jpg'%}" alt=""></a> </div>#}
+                                {#                                                            <div class="widget-posts-descr">#}
+                                {#                                                                <h4><a href="listing-single.html">Rutrum elementum</a></h4>#}
+                                {#                                                                <div class="geodir-category-location fl-wrap"><a href="#"><i class="fal fa-calendar"></i> 7 Mar 2019</a></div>#}
+                                {#                                                            </div>#}
+                                {#                                                        </li>#}
+                                {#                                                    </ul>#}
+                                {#                                                </div>#}
+                                {#                                                <!-- widget-posts end-->                                                        #}
+                                {#                                            </div>#}
+                                {#                                        </div>#}
+                                <!--box-widget end -->
+                                <!--box-widget-->
+                                {#                                        <div class="box-widget fl-wrap">#}
+                                {#                                            <div class="box-widget-title fl-wrap">Categories</div>#}
+                                {#                                            <div class="box-widget-content fl-wrap">#}
+                                {#                                                <ul class="cat-item no-list-style">#}
+                                {#                                                    <li><a href="#">Standard</a> <span>3</span></li>#}
+                                {#                                                    <li><a href="#">Video</a> <span>6 </span></li>#}
+                                {#                                                    <li><a href="#">Gallery</a> <span>12 </span></li>#}
+                                {#                                                    <li><a href="#">Quotes</a> <span>4</span></li>#}
+                                {#                                                </ul>#}
+                                {#                                            </div>#}
+                                {#                                        </div>#}
+                                <!--box-widget end -->
+                                <!--box-widget-->
+                                <div class="box-widget fl-wrap">
+                                    <div class="banner-widget fl-wrap">
+                                        <div class="bg-wrap bg-parallax-wrap-gradien">
+                                            <div class="bg  " data-bg="{% static 'images/eksath.jpg' %}"></div>
+                                        </div>
+                                        <div class="banner-widget_content">
+                                            <h5>Do you want to join our real estate network?</h5>
+                                            <a href="#" class="btn float-btn color-bg small-btn">Become an Agent</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--box-widget end -->
+                                <!--box-widget-->
+                                <div class="box-widget fl-wrap">
+                                    <div class="box-widget-title fl-wrap">Facilities</div>
+                                    <div class="box-widget-content fl-wrap">
+                                        <!--tags-->
+                                        <div class="list-single-tags fl-wrap tags-stylwrap" style="margin-top: 20px;">
+                                            <a href="#">{{ listing.type }}</a>
+                                            <a href="#">{{ listing.city }}</a>
+                                            <a href="#">{% if listing.security %}Security {% endif %}</a>
+                                            <a href="#">{% if listing.wi_fi %} Wifi {% endif %}</a>
+                                            <a href="#">{{ listing.category }}</a>
+                                            <a href="#"> {% if listing.parking %}Parking {% endif %} </a>
+                                        </div>
+                                        <!--tags end-->
+                                    </div>
+                                </div>
+                                <!--box-widget end -->
+                                <!--box-widget-->
+                                <div class="box-widget fl-wrap">
+                                    <div class="box-widget-title fl-wrap">Archive</div>
+                                    <div class="box-widget-content fl-wrap">
+                                        <ul class="cat-item cat-item_dec no-list-style">
+                                            <li><a href="#">March 2020</a></li>
+                                            <li><a href="#">May 2019</a></li>
+                                            <li><a href="#">January 2016</a></li>
+                                            <li><a href="#">Decemder 2018</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!--box-widget end -->
+                            </div>
+                            <!-- sidebar end-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="limit-box fl-wrap"></div>
+        </div>
+
+{% endblock %}

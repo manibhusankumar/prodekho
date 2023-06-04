@@ -1,0 +1,740 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <!--=============== basic  ===============-->
+    <meta charset="UTF-8">
+    <title>Homeradar - Real Estate Listing Template</title>
+    <meta name="robots" content="index, follow"/>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <!--=============== css  ===============-->
+    <link type="text/css" rel="stylesheet" href="{% static 'css/plugins.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/dashboard-style.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/dark-style.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/color.css' %}">
+    <!--=============== favicons ===============-->
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
+    <style>
+        .alert-danger {
+            color: red;
+        }
+        .date-div{
+
+        }
+        .date-input{
+            background-color: #282c3a00;
+            height: 32px;
+            width: 135px;
+            color: #fff;
+        }
+    </style>
+
+    {#    <div>#}
+    {#        {% if messages %}#}
+    {#            {% for message in messages %}#}
+    {#                {% if message.tags %}#}
+    {#                    <script>alert("{{ message }}")</script> {% endif %}#}
+    {#            {% endfor %}#}
+    {##}
+    {#        {% endif %}#}
+    {##}
+    {#    </div>#}
+
+
+</head>
+
+<body>
+<!--loader-->
+<div class="loader-wrap">
+    <div class="loader-inner">
+        <svg>
+            <defs>
+                <filter id="goo">
+                    <fegaussianblur in="SourceGraphic" stdDeviation="2" result="blur"/>
+                    <fecolormatrix in="blur" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 5 -2" result="gooey"/>
+                    <fecomposite in="SourceGraphic" in2="gooey" operator="atop"/>
+                </filter>
+            </defs>
+        </svg>
+    </div>
+</div>
+<!--loader end-->
+<!-- main -->
+<div id="main">
+    <!-- header -->
+    <header class="main-header">
+        <!--  logo  -->
+        <div class="logo-holder"><a href="{% url 'index' %}"><img src="{% static 'images/logo.png' %}" alt=""></a></div>
+        <!-- logo end  -->
+        <!-- nav-button-wrap-->
+        <div class="nav-button-wrap color-bg nvminit">
+            <div class="nav-button">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <!-- nav-button-wrap end-->
+        <!-- header-search button  -->
+        <div class="header-search-button">
+            <i class="fal fa-search"></i>
+            <span>Search...</span>
+        </div>
+        <!-- header-search button end  -->
+        <!--  add new  btn -->
+        <div class="add-list_wrap">
+            <a href="{% url 'add_listing' %}" class="add-list color-bg"><i class="fal fa-plus"></i>
+                <span>Add Listing</span></a>
+        </div>
+        <!--  add new  btn end -->
+
+        <!--  cart-btn   -->
+        <div class="cart-btn  tolt show-header-modal" data-microtip-position="bottom"
+             data-tooltip="Your Wishlist / Compare">
+            <i class="fal fa-bell"></i>
+            <span class="cart-btn_counter color-bg">5</span>
+        </div>
+        <!--  cart-btn end -->
+        <!--  login btn -->
+
+        {% if user.image %}
+            <div class="show-reg-form dasbdord-submenu-open"><img src=" {{ user.image.url }}" alt=""></div>
+        {% else %}
+            <div class="show-reg-form dasbdord-submenu-open"><img src="{% static 'images/avatar/1.jpg' %}" alt=""></div>
+        {% endif %}
+        <!--  login btn  end -->
+        <!--  dashboard-submenu-->
+        <div class="dashboard-submenu">
+            {% if user.username %}
+                <div class="dashboard-submenu-title fl-wrap">Welcome , <span>{{ user.username }}</span></div>
+            {% else %}
+                <div class="dashboard-submenu-title fl-wrap">Welcome  <span></span>
+                </div>
+            {% endif %}
+            <ul>
+{#                <li><a href="{% url 'dashboard' %}"><i class="fal fa-chart-line"></i>Dashboard</a></li>#}
+{#                <li><a href="{% url 'add_listing' %}"> <i class="fal fa-file-plus"></i>Add Listing</a></li>#}
+                <li><a href="{% url 'my_profile' %}"><i class="fal fa-user-edit"></i>Settings</a></li>
+            </ul>
+            <a href="{% url 'logout' %}" class="color-bg db_log-out"><i class="far fa-power-off"></i> Log Out</a>
+        </div>
+        <!--  dashboard-submenu  end -->
+        <!--  navigation -->
+        <div class="nav-holder main-menu">
+            <nav>
+                <ul class="no-list-style">
+                    {% load mptt_tags %}
+
+                    {% recursetree genres %}
+                        <li>
+                            <a href="#" class="">
+                                {{ node.name }}{% if node.is_root_node %} <i class="fa fa-caret-down"> </i>{% endif %}
+                            </a>
+
+                            {% if not node.is_leaf_node %}
+                                <!--second level -->
+
+                                <ul class="">
+                                    {% for child in node.get_children %}
+                                        {% if node.name == child.parent.name %}
+                                            <li>
+                                                {% url child.urls as child_url %}
+                                                {% if child_url %}
+                                                    <a href="{{ child_url }}">{{ child.name }}</a>
+                                                {% else %}
+                                                    {% comment %} Redirect to the index page if URL pattern is not found {% endcomment %}
+                                                    {% with 'not_fount' as index_url %}
+                                                        {% url index_url as url %}
+                                                        {% if url %}
+                                                            <a href="{{ url }}">{{ child.name }}</a>
+                                                        {% endif %}
+                                                    {% endwith %}
+                                                {% endif %}
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+
+                            {% endif %}
+                        </li>
+                    {% endrecursetree %}
+                </ul>
+            </nav>
+        </div>
+        <!-- navigation  end -->
+        <!-- header-search-wrapper -->
+        <div class="header-search-wrapper novis_search">
+            <div class="header-serach-menu">
+                <div class="custom-switcher fl-wrap">
+                    <div class="fieldset fl-wrap">
+                        <input type="radio" name="duration-1" id="buy_sw" class="tariff-toggle" checked>
+                        <label for="buy_sw">Buy</label>
+                        <input type="radio" name="duration-1" class="tariff-toggle" id="rent_sw">
+                        <label for="rent_sw" class="lss_lb">Rent</label>
+                        <span class="switch color-bg"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="custom-form">
+                <form method="post" name="registerform">
+                    <label>Keywords </label>
+                    <input type="text" placeholder="Address , Street , State..." value=""/>
+                    <label>Categories</label>
+                    <select data-placeholder="Categories" class="chosen-select on-radius no-search-select">
+                        <option>All Categories</option>
+                        <option>House</option>
+                        <option>Apartment</option>
+                        <option>Hotel</option>
+                        <option>Villa</option>
+                        <option>Office</option>
+                    </select>
+                    <label style="margin-top:10px;">Price Range</label>
+                    <div class="price-rage-item fl-wrap">
+                        <input type="text" class="price-range" data-min="100" data-max="100000" name="price-range1"
+                               data-step="1" value="1" data-prefix="₹">
+                    </div>
+                    <button onclick="location.href='listing.html'" type="button" class="btn float-btn color-bg"><i
+                            class="fal fa-search"></i> Search
+                    </button>
+                </form>
+            </div>
+        </div>
+        <!-- header-search-wrapper end  -->
+        <!-- wishlist-wrap-->
+        <div class="header-modal novis_wishlist tabs-act">
+            <ul class="tabs-menu fl-wrap no-list-style">
+                <li class="current"><a href="#tab-wish"> Wishlist <span>- 3</span></a></li>
+                <li><a href="#tab-compare"> Compare <span>- 2</span></a></li>
+            </ul>
+            <!--tabs -->
+            <div class="tabs-container">
+                <div class="tab">
+                    <!--tab -->
+                    <div id="tab-wish" class="tab-content first-tab">
+                        <!-- header-modal-container-->
+                        <div class="header-modal-container scrollbar-inner fl-wrap" data-simplebar>
+                            <!--widget-posts-->
+                            <div class="widget-posts  fl-wrap">
+                                <ul class="no-list-style">
+                                    <li>
+                                        <div class="widget-posts-img"><a href="listing-single.html"><img
+                                                src="{% static 'images/all/small/1.jpg' %}" alt=""></a>
+                                        </div>
+                                        <div class="widget-posts-descr">
+                                            <h4><a href="listing-single.html">Affordable Urban Room</a></h4>
+                                            <div class="geodir-category-location fl-wrap"><a href="#"><i
+                                                    class="fas fa-map-marker-alt"></i> 40 Journal Square , NJ, USA</a>
+                                            </div>
+                                            <div class="widget-posts-descr-price"><span>Price: </span> ₹ 1500 / per
+                                                month
+                                            </div>
+                                            <div class="clear-wishlist"><i class="fal fa-trash-alt"></i></div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="widget-posts-img"><a href="listing-single.html"><img
+                                                src="{% static 'images/all/small/1.jpg' %}" alt=""></a>
+                                        </div>
+                                        <div class="widget-posts-descr">
+                                            <h4><a href="listing-single.html">Family House</a></h4>
+                                            <div class="geodir-category-location fl-wrap"><a href="#"><i
+                                                    class="fas fa-map-marker-alt"></i> 34-42 Montgomery St , NY, USA</a>
+                                            </div>
+                                            <div class="widget-posts-descr-price"><span>Price: </span> ₹ 50.000</div>
+                                            <div class="clear-wishlist"><i class="fal fa-trash-alt"></i></div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="widget-posts-img"><a href="listing-single.html"><img
+                                                src="{% static 'images/all/small/1.jpg' %}" alt=""></a>
+                                        </div>
+                                        <div class="widget-posts-descr">
+                                            <h4><a href="listing-single.html">Apartment to Rent</a></h4>
+                                            <div class="geodir-category-location fl-wrap"><a href="#"><i
+                                                    class="fas fa-map-marker-alt"></i>75 Prince St, NY, USA</a></div>
+                                            <div class="widget-posts-descr-price"><span>Price: </span> ₹100 / per night
+                                            </div>
+                                            <div class="clear-wishlist"><i class="fal fa-trash-alt"></i></div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- widget-posts end-->
+                        </div>
+                        <!-- header-modal-container end-->
+                        <div class="header-modal-top fl-wrap">
+                            <div class="clear_wishlist color-bg"><i class="fal fa-trash-alt"></i> Clear all</div>
+                        </div>
+                    </div>
+                    <!--tab end -->
+                    <!--tab -->
+                    <div class="tab">
+                        <div id="tab-compare" class="tab-content">
+                            <!-- header-modal-container-->
+                            <div class="header-modal-container scrollbar-inner fl-wrap" data-simplebar>
+                                <!--widget-posts-->
+                                <div class="widget-posts  fl-wrap">
+                                    <ul class="no-list-style">
+                                        <li>
+                                            <div class="widget-posts-img"><a href="listing-single.html"><img
+                                                    src="{% static 'images/all/small/1.jpg' %}" alt=""></a>
+                                            </div>
+                                            <div class="widget-posts-descr">
+                                                <h4><a href="listing-single.html">Gorgeous house for sale</a></h4>
+                                                <div class="geodir-category-location fl-wrap"><a href="#"><i
+                                                        class="fas fa-map-marker-alt"></i> 70 Bright St New York, USA
+                                                </a></div>
+                                                <div class="widget-posts-descr-price"><span>Price: </span> ₹ 52.100
+                                                </div>
+                                                <div class="clear-wishlist"><i class="fal fa-trash-alt"></i></div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="widget-posts-img"><a href="listing-single.html"><img
+                                                    src="{% static 'images/all/small/1.jpg' %}" alt=""></a>
+                                            </div>
+                                            <div class="widget-posts-descr">
+                                                <h4><a href="listing-single.html">Family Apartments</a></h4>
+                                                <div class="geodir-category-location fl-wrap"><a href="#"><i
+                                                        class="fas fa-map-marker-alt"></i> W 85th St, New York, USA </a>
+                                                </div>
+                                                <div class="widget-posts-descr-price"><span>Price: </span> ₹ 72.400
+                                                </div>
+                                                <div class="clear-wishlist"><i class="fal fa-trash-alt"></i></div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- widget-posts end-->
+                            </div>
+                            <!-- header-modal-container end-->
+                            <div class="header-modal-top fl-wrap">
+                                <a class="clear_wishlist color-bg" href="compare.html"><i class="fal fa-random"></i>
+                                    Compare</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!--tab end -->
+                </div>
+                <!--tabs end -->
+            </div>
+        </div>
+
+    </header>
+    <!-- header end  -->
+    <!-- wrapper  -->
+    <div id="wrapper">
+        {% include 'user_manu.html' %}
+        <div class="dashboard-content">
+            <div class="dashboard-menu-btn color-bg"><span><i class="fas fa-bars"></i></span>Dasboard Menu</div>
+            <div class="container dasboard-container">
+                <!-- dashboard-title -->
+                <div class="dashboard-title fl-wrap">
+                    <div class="dashboard-title-item"><span>Edit Profile</span></div>
+                    <div class="dashbard-menu-header">
+                        <div class="dashbard-menu-avatar fl-wrap">
+                            {% if user.image %}
+                                <img src="{{ user.image.url }}" alt="">
+                            {% else %}
+                                <img src="{% static 'images/avatar/1.jpg' %}" alt="">
+                            {% endif %}
+                            <h4>Welcome, <span>{{ request.user.username }}</span></h4>
+                        </div>
+                        <a href="{% url 'logout' %}" class="log-out-btn   tolt" data-microtip-position="bottom"
+                           data-tooltip="Log Out"><i class="far fa-power-off"></i></a>
+                    </div>
+                    <!--Tariff Plan menu-->
+                    <div class="tfp-det-container">
+                        <div class="tfp-btn"><span>Your Tariff Plan : </span> <strong>Extended</strong></div>
+                        <div class="tfp-det">
+                            <p>You Are on <a href="#">Extended</a> . Use link bellow to view details or upgrade.
+                            </p>
+                            <a href="#" class="tfp-det-btn color-bg">Details</a>
+                        </div>
+                    </div>
+                    <!--Tariff Plan menu end-->
+                </div>
+                <!-- dashboard-title end -->
+                <!-- dasboard-wrapper-->
+                <div class="dasboard-wrapper fl-wrap no-pag">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <form method="POST"  enctype="multipart/form-data" id="update-profile-agent">
+                                {% csrf_token %}
+
+                                <div class="dasboard-widget-title fl-wrap">
+                                    <h5><i class="fas fa-user-circle"></i>Change Avatar</h5>
+                                </div>
+                                <div class="dasboard-widget-box nopad-dash-widget-box fl-wrap">
+                                    <div class="edit-profile-photo">
+                                        {% if user.image %}
+
+                                            <img src="{{ user.image.url }}" class="respimg" alt="">
+                                        {% else %}
+                                            <img src="{% static 'images/avatar/1.jpg' %}" class="respimg" alt="">
+                                        {% endif %}
+                                        <div class="change-photo-btn">
+                                            <div class="photoUpload">
+                                                <span> Upload New Photo</span>
+                                                <input type="file" class="upload" name="image">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-wrap bg-parallax-wrap-gradien">
+                                        {% if user.image %}
+                                            <div class="bg" data-bg="{{ user.image.url }}"></div>
+                                        {% else %}
+                                            <div class="bg" data-bg="{% static 'images/avatar/1.jpg' %}"></div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="change-photo-btn cpb-2  ">
+                                        <div class="photoUpload color-bg">
+                                            <span> <i class="far fa-camera"></i> Change Cover </span>
+                                            <input type="file" class="upload" name="image">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="dasboard-widget-title fl-wrap">
+                                    <h5><i class="fas fa-key"></i>Personal Info</h5>
+                                </div>
+                                <div class="dasboard-widget-box fl-wrap">
+                                    <div class="custom-form">
+                                        <label>User Name <span class="dec-icon"><i
+                                                class="far fa-user"></i></span></label>
+                                        <input type="text" placeholder="" name="username" value="{{ user.username }}"/>
+                                        {#                                        <label>Last Name <span class="dec-icon"><i#}
+                                        {#                                                    class="fas fa-user"></i></span></label>#}
+                                        {#                                        <input type="text" placeholder="" value="{{ user.username }}" name="username" />#}
+                                        <label>Email Address <span class="dec-icon"><i
+                                                class="far fa-envelope"></i></span></label>
+                                        <input type="text" placeholder="" value="{{ user.email }}" name="email"/>
+
+                                        {#                                        <label>Phone<span class="dec-icon"><i class="far fa-phone"></i> </span></label>#}
+                                        {#                                        <input id="Phone Number" type="number" placeholder="Enter Your Number" name="{{ user.phone }}"#}
+                                        {#                                            pattern="[6-9][0-9]{9}" value="+91" class="check" />#}
+                                        <label>Phone <span class="dec-icon"><i
+                                                class="fas fa-phone-alt"></i></span></label>
+                                        <input type="text" placeholder="" name="phone" value="{{ user.phone }}"/>
+
+                                        {#                                        <label>Company Name <span class="dec-icon"><i#}
+                                        {#                                                    class="far fa-user"></i></span></label>#}
+                                        {#                                        <input type="text" placeholder="Enter Your Company Name" value="" />#}
+                                        {##}
+                                        {#                                        <label>Company Address <span class="dec-icon"><i class="fas fa-map-marker"></i>#}
+                                        {#                                            </span></label>#}
+                                        {#                                        <input type="text" placeholder="USA 27TH Brooklyn NY" value="" />#}
+                                        {##}
+                                        {#                                        <label>About Us </label>#}
+                                        {#                                        <textarea cols="40" rows="3" placeholder="Brief Description of your Company"#}
+                                        {#                                            style="margin-bottom:20px;"></textarea>#}
+                                        <button class="btn    color-bg  float-btn">Save Changes</button>
+                                    </div>
+
+                                    <script src="{% static 'Number.js' %}"></script>
+                                </div>
+                            </form>
+
+                             <form method="POST" action="{% url 'edit_agent_profile' %}" id="agent-form" enctype="multipart/form-data">
+                                   {% csrf_token %}
+                            <div class="custom-form">
+
+                                <div> <h1>Profile Update</h1></div>
+                                <label>First Name <span class="dec-icon"><i
+                                        class="far fa-user"></i></span></label>
+                                <input type="text" placeholder="" name="first_name" value="{{ user.agent.first_name }}"/>
+                                <label>Last Name <span class="dec-icon"><i
+                                        class="fas fa-user"></i></span></label>
+                                <input type="text" placeholder="" value="{{ user.agent.last_name }}" name="last_name"/>
+
+                                <<label>Address <span class="dec-icon"><i
+                                        class="fas fa-map-marker"></i></span></label>
+                                <input type="text" placeholder="" name="address" value="{{ user.agent.address }}"/>
+                                <label>Street <span class="dec-icon"><i class="fa fa-street-view"></i>
+                                                                                    </span></label>
+                                <input type="text" placeholder="" value="{{ user.agent.street }}" name="street" />
+
+                                {#                                        <label>Phone<span class="dec-icon"><i class="far fa-phone"></i> </span></label>#}
+                                {#                                        <input id="Phone Number" type="number" placeholder="Enter Your Number" name="{{ user.phone }}"#}
+                                {#                                            pattern="[6-9][0-9]{9}" value="+91" class="check" />#}
+                                <label>City <span class="dec-icon"><i
+                                        class="fas fa-city"></i></span></label>
+                                <input type="text" placeholder="" name="city" value="{{ user.agent.city}}"/>
+
+                                <label>zip_code <span class="dec-icon"> <i
+                                        class="fas fa-map-marker"></i></span></label>
+                                <input type="text"  name="zip_code" placeholder="Enter zip_code" value="{{ user.agent.zip_code }}"/>
+
+                                <label>District <span class="dec-icon"> <i
+                                        class="fas fa-map-marker"></i></span></label>
+                                <input type="text" name="district" placeholder="Enter Your Company Name" value="{{ user.agent.district }}"/>
+
+                                <label>Country <span class="dec-icon"><i class="fas fa-map-marker"></i>
+                                                                                    </span></label>
+                                <input type="text" name="country" placeholder="" value="{{ user.agent.country }}"/>
+
+                                <label>Birthday <span class="dec-icon"><i class="fa fa-calendar"></i>
+                                                                                    </span></label>
+                                {% if user.agent.dob %}
+                                    {% with dob=user.agent.dob|date:'Y-m-d' %}
+                                        <input type="date" id="date" name="dob" value="{{ dob }}">
+                                    {% endwith %}
+                                {% else %}
+                                    <input type="date" id="date" name="dob" value="{{ user.agent.dob }}">
+                                {% endif %}
+
+                                    <label>Gender <span class="dec-icon"><i class="fa fa-venus-double"></i>
+                                                                                    </span></label>
+                                <select id="gender" name="gender" style="margin-bottom: 20px;">
+                                    <option value="">Choose Gender</option>
+                                    <option value="male" {% if user.agent.gender == 'male' %}selected{% endif %}>
+                                        Male
+                                    </option>
+                                    <option value="female"
+                                            {% if user.agent.gender == 'female' %}selected{% endif %}>Female
+                                    </option>
+                                    <option value="other"
+                                            {% if user.agent.gender == 'other' %}selected{% endif %}>Other
+                                    </option>
+                                </select>
+
+                            <label>Title <span class="dec-icon"><i class="fas fa-map-marker"></i>
+                                                                                    </span></label>
+                                <input type="text" name="title" placeholder="" value="{{ user.agent.title }}"/>
+
+
+                                <label>About Us </label>
+                                <textarea cols="40" rows="3"   name='about' placeholder=""
+                                          style="margin-bottom:20px;" > {{ user.agent.about|safe }}</textarea>
+
+                            <label>Service Areas </label>
+                                <textarea cols="40" rows="3"   name='service_areas' placeholder=""
+                                          style="margin-bottom:20px;" > {{ user.agent.service_areas|safe }}</textarea>
+                                <button class="btn    color-bg  float-btn">Save Changes</button>
+
+                            </div>
+
+                                 </form>
+
+
+
+                        </div>
+
+
+                        <div class="col-md-5">
+                            <div class="dasboard-widget-title dbt-mm fl-wrap">
+                                <h5><i class="fas fa-key"></i>Change Password</h5>
+                            </div>
+                            <div class="dasboard-widget-box fl-wrap">
+                                <div class="custom-form">
+                                    <form method="POST" action="{% url 'change_password' %}" id="change-password-form" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        {#                                        <div class="pass-input-wrap fl-wrap">#}
+                                        {#                                            <label>Current Password<span class="dec-icon"><i#}
+                                        {#                                                        class="far fa-lock-open-alt"></i></span></label>#}
+                                        {#                                            <input type="password" class="pass-input" placeholder="" value="{{ user.password }}" />#}
+                                        {#                                            <span class="eye"><i class="far fa-eye" aria-hidden="true"></i> </span>#}
+                                        {#                                        </div>#}
+                                        <div class="pass-input-wrap fl-wrap">
+                                            <label>New Password<span class="dec-icon"><i
+                                                    class="far fa-lock-alt"></i></span></label>
+                                            <input type="password" class="pass-input" placeholder="" value=""
+                                                   name="password"/>
+                                            <span class="eye"><i class="far fa-eye" aria-hidden="true"></i> </span>
+                                        </div>
+                                        <div class="pass-input-wrap fl-wrap">
+                                            <label>Confirm New Password<span class="dec-icon"><i
+                                                    class="far fa-shield-check"></i> </span></label>
+                                            <input type="password" class="pass-input" placeholder="" value=""
+                                                   name="confirm_password"/>
+                                            <span class="eye"><i class="far fa-eye" aria-hidden="true"></i> </span>
+                                        </div>
+                                        <button class="btn    color-bg  float-btn">Save Changes</button>
+                                    </form>
+{#                                    <div>#}
+{#                                        {% if messages %}#}
+{#                                            {% for message in messages %}#}
+{#                                                <div class="alert alert-{{ message.tags }} alert-danger">{{ message }}</div>#}
+{#                                            {% endfor %}#}
+{#                                        {% endif %}#}
+{#                                    </div>#}
+                                </div>
+
+
+                                <div class="dasboard-widget-title fl-wrap" style="margin-top: 30px;">
+                                    <h5><i class="fas fa-share-alt"></i>Your Socials</h5>
+                                </div>
+                                <div class="dasboard-widget-box fl-wrap">
+                                    <form method="POST" action="{% url 'social' %}" enctype="multipart/form-data" id="socialmedia-form">
+                                        {% csrf_token %}
+                                    <div class="custom-form">
+                                        <label>Facebook <span class="dec-icon"><i
+                                                class="fab fa-facebook"></i></span></label>
+{#                                        {% if form.initial.facebook %}#}
+{##}
+{#                                            <input type="text" name="facebook" placeholder=""#}
+{#                                                   value="{{ form.initial.facebook }}"/>#}
+{#                                        {% else %}#}
+                                            {% with socialmedia=form.instance.socialmedia.first %}
+                                                <input type="text" name="facebook" placeholder=""
+                                                       value="{{ socialmedia.facebook }}"/>
+                                            {% endwith %}
+{#                                        {% endif %}#}
+{#                                        {{ form.facebook }}#}
+                                        <label>Twitter <span class="dec-icon"><i
+                                                class="fab fa-twitter"></i></span></label>
+{#                                    {% if form.initial.twitter %}#}
+{#                                        <input type="text"  name= 'twitter' placeholder="" value=" {{ form.initial.twitter }}"/>#}
+{#                                    {% else %}#}
+                                         {% with socialmedia=form.instance.socialmedia.first %}
+                                        <input type="text"  name= 'twitter' placeholder="" value=" {{ socialmedia.twitter }}"/>
+                                         {% endwith %}
+
+{#                                    {% endif %}#}
+{#                                      {{ social }}#}
+                                        <label>Instagram<span class="dec-icon"><i class="fab fa-instagram"></i>
+                                            </span></label>
+                                        {% with socialmedia=form.instance.socialmedia.first %}
+
+                                        <input type="text" name="instagram" placeholder="" value="{{ socialmedia.instagram }}"/>
+                                     {% endwith %}
+                                        <label>Linkdin<span class="dec-icon"><i class="fab fa-vk"></i> </span></label>
+                                    {% with socialmedia=form.instance.socialmedia.first %}
+                                        <input type="text" name = "linkedin" placeholder="" value="{{ socialmedia.linkedin }}"/>
+                                    {% endwith %}
+                                        <button class="btn    color-bg  float-btn">Save Changes</button>
+                                    </div>
+                                        </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- dasboard-wrapper end -->
+                </div>
+                <!-- dashboard-footer -->
+                <div class="dashboard-footer">
+                    <div class="dashboard-footer-links fl-wrap">
+                        <span>Helpfull Links:</span>
+                        <ul>
+                            <li><a href="{% url 'about' %}">About </a></li>
+                            <li><a href="{% url 'blog' %}">Blog</a></li>
+                            <li><a href="pricing.html">Pricing Plans</a></li>
+                            <li><a href="contacts.html">Contacts</a></li>
+                            <li><a href="help.html">Help Center</a></li>
+                        </ul>
+                    </div>
+                    <a href="#main" class="dashbord-totop  custom-scroll-link"><i class="fas fa-caret-up"></i></a>
+                </div>
+                <!-- dashboard-footer end -->
+            </div>
+            <!-- content end -->
+            <div class="dashbard-bg gray-bg"></div>
+        </div>
+        <!-- wrapper end -->
+    </div>
+    <!-- Main end -->
+    <!--=============== scripts  ===============-->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/plugins.js' %}"></script>
+    <script src="{% static 'js/scripts.js' %}"></script>
+    <script src="{% static 'js/dashboard.js' %}"></script>
+<script>
+    $(document).ready(function() {
+    $('#socialmedia-form').on('submit', function(event) {
+        event.preventDefault();
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function(data) {
+                if (data.success) {
+                    alert('Social media saved successfully.');
+                } else {
+                    alert('There was an error saving social media.');
+                }
+            },
+            error: function() {
+                alert('There was an error saving social media.');
+            }
+        });
+    });
+});
+
+    $(document).ready(function() {
+    $('#agent-form').on('submit', function(event) {
+        event.preventDefault();
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function(data) {
+                if (data.success) {
+                    alert('profile updated saved successfully.');
+                } else {
+                    alert('There was an error saving profile.');
+                }
+            },
+            error: function() {
+                alert('There was an error saving profile.');
+            }
+        });
+    });
+});
+$('#change-password-form').submit(function(event) {
+    event.preventDefault();
+    $.ajax({
+        url: $(this).attr('action'),
+        type: 'post',
+        data: $(this).serialize(),
+        success: function(data) {
+            if (data.success) {
+                alert('Password changed successfully.');
+            }
+            if(data.error === false) {
+                alert(data.message);
+            }
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            // Handle error
+            alert('Error: ' + errorThrown);
+        }
+    });
+});
+
+
+$(document).ready(function() {
+    $('#update-profile-agent').submit(function(e) {
+        e.preventDefault();
+        var form = $(this);
+        $.ajax({
+            type: form.attr('method'),
+            url: form.attr('action'),
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                if (data.success) {
+                    alert('Profile updated successfully!');
+                    window.location.reload();
+                    {#window.location.href = '{% url "my_profile" %}';#}
+                } else {
+                    alert('An error occurred.');
+                }
+            },
+            error: function(data) {
+                if (data.responseJSON) {
+                    var errors = data.responseJSON.errors;
+                    // Display errors to the user
+                } else {
+                    alert('An error occurred.');
+                }
+            }
+        });
+    });
+});
+
+
+</script>
+</body>
+
+</html>

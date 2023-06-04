@@ -20,6 +20,15 @@
         .alert-danger {
             color: red;
         }
+        .date-div{
+
+        }
+        .date-input{
+            background-color: #282c3a00;
+            height: 32px;
+            width: 135px;
+            color: #fff;
+        }
     </style>
 
     {#    <div>#}
@@ -74,7 +83,7 @@
         <!-- header-search button end  -->
         <!--  add new  btn -->
         <div class="add-list_wrap">
-            <a href="dashboard-add-listing.html" class="add-list color-bg"><i class="fal fa-plus"></i>
+            <a href="{% url 'add_listing' %}" class="add-list color-bg"><i class="fal fa-plus"></i>
                 <span>Add Listing</span></a>
         </div>
         <!--  add new  btn end -->
@@ -96,16 +105,16 @@
         <!--  login btn  end -->
         <!--  dashboard-submenu-->
         <div class="dashboard-submenu">
-            {% if user.image %}
-                <div class="dashboard-submenu-title fl-wrap">Welcome , <span>{{ user.image.url }}</span></div>
+            {% if user.username %}
+                <div class="dashboard-submenu-title fl-wrap">Welcome , <span>{{ user.username }}</span></div>
             {% else %}
-                <div class="dashboard-submenu-title fl-wrap">Welcome , <span>{% static 'images/avatar/1.jpg' %}</span>
+                <div class="dashboard-submenu-title fl-wrap">Welcome  <span></span>
                 </div>
             {% endif %}
             <ul>
                 <li><a href="{% url 'dashboard' %}"><i class="fal fa-chart-line"></i>Dashboard</a></li>
-                <li><a href="dashboard-add-listing.html"> <i class="fal fa-file-plus"></i>Add Listing</a></li>
-                <li><a href="dashboard-myprofile.html"><i class="fal fa-user-edit"></i>Settings</a></li>
+                <li><a href="{% url 'add_listing' %}"> <i class="fal fa-file-plus"></i>Add Listing</a></li>
+                <li><a href="{% url 'my_profile' %}"><i class="fal fa-user-edit"></i>Settings</a></li>
             </ul>
             <a href="{% url 'logout' %}" class="color-bg db_log-out"><i class="far fa-power-off"></i> Log Out</a>
         </div>
@@ -315,51 +324,7 @@
     <!-- header end  -->
     <!-- wrapper  -->
     <div id="wrapper">
-        <!-- dashbard-menu-wrap -->
-        <div class="dashbard-menu-overlay"></div>
-        <div class="dashbard-menu-wrap">
-            <div class="dashbard-menu-close"><i class="fal fa-times"></i></div>
-            <div class="dashbard-menu-container">
-                <!-- user-profile-menu-->
-                <div class="user-profile-menu">
-                    <h3>Main</h3>
-                    <ul class="no-list-style">
-                        <li><a href="{% url 'dashboard' %}"><i class="fal fa-chart-line"></i>Dashboard</a></li>
-                        <li><a href="{% url 'edit_user' pk=user.pk %}" class="user-profile-act"><i
-                                class="fal fa-user-edit"></i> Edit profile</a></li>
-                        <li><a href="dashboard-messages.html"><i class="fal fa-envelope"></i> Messages
-                            <span>3</span></a></li>
-                        <li><a href="dashboard-agents.html"><i class="fal fa-users"></i> Agents List</a></li>
-                        <li>
-                            <a href="#" class="submenu-link"><i class="fal fa-plus"></i>Submenu</a>
-                            <ul class="no-list-style">
-                                <li><a href="#"><i class="fal fa-th-list"></i> Submenu 2 </a></li>
-                                <li><a href="#"> <i class="fal fa-calendar-check"></i> Submenu 2</a></li>
-                                <li><a href="#"><i class="fal fa-comments-alt"></i>Submenu 2</a></li>
-                                <li><a href="#"><i class="fal fa-file-plus"></i> Submenu 2</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <!-- user-profile-menu end-->
-                <!-- user-profile-menu-->
-                <div class="user-profile-menu">
-                    <h3>Listings</h3>
-                    <ul class="no-list-style">
-                        <li><a href="dashboard-listing-table.html"><i class="fal fa-th-list"></i> My listigs </a>
-                        </li>
-                        <li><a href="dashboard-bookings.html"> <i class="fal fa-calendar-check"></i> Bookings
-                            <span>2</span></a></li>
-                        <li><a href="dashboard-review.html"><i class="fal fa-comments-alt"></i> Reviews </a></li>
-                        <li><a href="dashboard-add-listing.html"><i class="fal fa-file-plus"></i> Add New</a></li>
-                    </ul>
-                </div>
-                <!-- user-profile-menu end-->
-            </div>
-            <div class="dashbard-menu-footer">© Homeradar 2022 . All rights reserved.</div>
-        </div>
-        <!-- dashbard-menu-wrap end  -->
-        <!-- content -->
+        {% include 'user_manu.html' %}
         <div class="dashboard-content">
             <div class="dashboard-menu-btn color-bg"><span><i class="fas fa-bars"></i></span>Dasboard Menu</div>
             <div class="container dasboard-container">
@@ -394,7 +359,7 @@
                 <div class="dasboard-wrapper fl-wrap no-pag">
                     <div class="row">
                         <div class="col-md-7">
-                            <form method="POST">
+                            <form method="POST"  enctype="multipart/form-data" id="update-profile-form">
                                 {% csrf_token %}
 
                                 <div class="dasboard-widget-title fl-wrap">
@@ -411,7 +376,7 @@
                                         <div class="change-photo-btn">
                                             <div class="photoUpload">
                                                 <span> Upload New Photo</span>
-                                                <input type="file" class="upload">
+                                                <input type="file" class="upload" name="image">
                                             </div>
                                         </div>
                                     </div>
@@ -425,7 +390,7 @@
                                     <div class="change-photo-btn cpb-2  ">
                                         <div class="photoUpload color-bg">
                                             <span> <i class="far fa-camera"></i> Change Cover </span>
-                                            <input type="file" class="upload">
+                                            <input type="file" class="upload" name="image">
                                         </div>
                                     </div>
                                 </div>
@@ -433,7 +398,6 @@
                                     <h5><i class="fas fa-key"></i>Personal Info</h5>
                                 </div>
                                 <div class="dasboard-widget-box fl-wrap">
-
                                     <div class="custom-form">
                                         <label>User Name <span class="dec-icon"><i
                                                 class="far fa-user"></i></span></label>
@@ -449,7 +413,7 @@
                                         {#                                        <input id="Phone Number" type="number" placeholder="Enter Your Number" name="{{ user.phone }}"#}
                                         {#                                            pattern="[6-9][0-9]{9}" value="+91" class="check" />#}
                                         <label>Phone <span class="dec-icon"><i
-                                                class="far fa-user"></i></span></label>
+                                                class="fas fa-phone-alt"></i></span></label>
                                         <input type="text" placeholder="" name="phone" value="{{ user.phone }}"/>
 
                                         {#                                        <label>Company Name <span class="dec-icon"><i#}
@@ -470,38 +434,77 @@
                                 </div>
                             </form>
 
+                             <form method="POST" action="{% url 'user_profile' %}" id="user-form" enctype="multipart/form-data">
+                                   {% csrf_token %}
                             <div class="custom-form">
-                                # ddd
+
+                                <div> <h1>Profile Update</h1></div>
                                 <label>First Name <span class="dec-icon"><i
                                         class="far fa-user"></i></span></label>
-                                <input type="text" placeholder="" name="username" value="{{ user.username }}"/>
+                                <input type="text" placeholder="" name="first_name" value="{{ user.user_profile.first_name }}"/>
                                 <label>Last Name <span class="dec-icon"><i
                                         class="fas fa-user"></i></span></label>
-                                <input type="text" placeholder="" value="{{ user.username }}" name="username"/>
-                                <label> Address <span class="dec-icon"><i
-                                        class="far fa-envelope"></i></span></label>
-                                <input type="text" placeholder="" value="{{ user.email }}" name="email"/>
+                                <input type="text" placeholder="" value="{{ user.user_profile.last_name }}" name="last_name"/>
+
+                                <<label>Address <span class="dec-icon"><i
+                                        class="fas fa-map-marker"></i></span></label>
+                                <input type="text" placeholder="" name="address" value="{{ user.user_profile.address }}"/>
+                                <label>Street <span class="dec-icon"><i class="fa fa-street-view"></i>
+                                                                                    </span></label>
+                                <input type="text" placeholder="" value="{{ user.user_profile.street }}" name="street" />
 
                                 {#                                        <label>Phone<span class="dec-icon"><i class="far fa-phone"></i> </span></label>#}
                                 {#                                        <input id="Phone Number" type="number" placeholder="Enter Your Number" name="{{ user.phone }}"#}
                                 {#                                            pattern="[6-9][0-9]{9}" value="+91" class="check" />#}
                                 <label>City <span class="dec-icon"><i
-                                        class="far fa-user"></i></span></label>
-                                <input type="text" placeholder="" name="phone" value="{{ user.phone }}"/>
+                                        class="fas fa-city"></i></span></label>
+                                <input type="text" placeholder="" name="city" value="{{ user.user_profile.city}}"/>
 
-                                <label>District <span class="dec-icon"><i
-                                        class="far fa-user"></i></span></label>
-                                <input type="text" placeholder="Enter Your Company Name" value=""/>
+                                <label>zip_code <span class="dec-icon"> <i
+                                        class="fas fa-map-marker"></i></span></label>
+                                <input type="text"  name="zip_code" placeholder="Enter zip_code" value="{{ user.user_profile.zip_code }}"/>
+
+                                <label>District <span class="dec-icon"> <i
+                                        class="fas fa-map-marker"></i></span></label>
+                                <input type="text" name="district" placeholder="Enter Your Company Name" value="{{ user.user_profile.district }}"/>
 
                                 <label>Country <span class="dec-icon"><i class="fas fa-map-marker"></i>
                                                                                     </span></label>
-                                <input type="text" placeholder="USA 27TH Brooklyn NY" value=""/>
+                                <input type="text" name="country" placeholder="" value="{{ user.user_profile.country }}"/>
+
+                                <label>Birthday <span class="dec-icon"><i class="fa fa-calendar"></i>
+                                                                                    </span></label>
+                                {% if user.user_profile.dob %}
+                                    {% with dob=user.user_profile.dob|date:'Y-m-d' %}
+                                        <input type="date" id="date" name="dob" value="{{ dob }}">
+                                    {% endwith %}
+                                {% else %}
+                                    <input type="date" id="date" name="dob" value="{{ user.user_profile.dob }}">
+                                {% endif %}
+
+                                    <label>Gender <span class="dec-icon"><i class="fa fa-venus-double"></i>
+                                                                                    </span></label>
+                                <select id="gender" name="gender" style="margin-bottom: 20px;">
+                                    <option value="">Choose Gender</option>
+                                    <option value="male" {% if user.user_profile.gender == 'male' %}selected{% endif %}>
+                                        Male
+                                    </option>
+                                    <option value="female"
+                                            {% if user.user_profile.gender == 'female' %}selected{% endif %}>Female
+                                    </option>
+                                    <option value="other"
+                                            {% if user.user_profile.gender == 'other' %}selected{% endif %}>Other
+                                    </option>
+                                </select>
 
                                 <label>About Us </label>
-                                <textarea cols="40" rows="3" placeholder="Brief Description of your Company"
-                                          style="margin-bottom:20px;"></textarea>
+                                <textarea cols="40" rows="3"   name='about' placeholder=""
+                                          style="margin-bottom:20px;" > {{ user.user_profile.about }}</textarea>
                                 <button class="btn    color-bg  float-btn">Save Changes</button>
+
                             </div>
+                                 </form>
+
 
 
                         </div>
@@ -513,7 +516,7 @@
                             </div>
                             <div class="dasboard-widget-box fl-wrap">
                                 <div class="custom-form">
-                                    <form method="POST" action="{% url 'change_password' %}">
+                                    <form method="POST" action="{% url 'change_password' %}" id="change-password-form" enctype="multipart/form-data">
                                         {% csrf_token %}
                                         {#                                        <div class="pass-input-wrap fl-wrap">#}
                                         {#                                            <label>Current Password<span class="dec-icon"><i#}
@@ -537,13 +540,13 @@
                                         </div>
                                         <button class="btn    color-bg  float-btn">Save Changes</button>
                                     </form>
-                                    <div>
-                                        {% if messages %}
-                                            {% for message in messages %}
-                                                <div class="alert alert-{{ message.tags }} alert-danger">{{ message }}</div>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
+{#                                    <div>#}
+{#                                        {% if messages %}#}
+{#                                            {% for message in messages %}#}
+{#                                                <div class="alert alert-{{ message.tags }} alert-danger">{{ message }}</div>#}
+{#                                            {% endfor %}#}
+{#                                        {% endif %}#}
+{#                                    </div>#}
                                 </div>
 
 
@@ -551,20 +554,46 @@
                                     <h5><i class="fas fa-share-alt"></i>Your Socials</h5>
                                 </div>
                                 <div class="dasboard-widget-box fl-wrap">
+                                    <form method="POST" action="{% url 'social' %}" enctype="multipart/form-data" id="socialmedia-form">
+                                        {% csrf_token %}
                                     <div class="custom-form">
                                         <label>Facebook <span class="dec-icon"><i
                                                 class="fab fa-facebook"></i></span></label>
-                                        <input type="text" placeholder="https://www.facebook.com/" value=""/>
+{#                                        {% if form.initial.facebook %}#}
+{##}
+{#                                            <input type="text" name="facebook" placeholder=""#}
+{#                                                   value="{{ form.initial.facebook }}"/>#}
+{#                                        {% else %}#}
+                                            {% with socialmedia=form.instance.socialmedia.first %}
+                                                <input type="text" name="facebook" placeholder=""
+                                                       value="{{ socialmedia.facebook }}"/>
+                                            {% endwith %}
+{#                                        {% endif %}#}
+{#                                        {{ form.facebook }}#}
                                         <label>Twitter <span class="dec-icon"><i
                                                 class="fab fa-twitter"></i></span></label>
-                                        <input type="text" placeholder="https://twitter.com/" value=""/>
+{#                                    {% if form.initial.twitter %}#}
+{#                                        <input type="text"  name= 'twitter' placeholder="" value=" {{ form.initial.twitter }}"/>#}
+{#                                    {% else %}#}
+                                         {% with socialmedia=form.instance.socialmedia.first %}
+                                        <input type="text"  name= 'twitter' placeholder="" value=" {{ socialmedia.twitter }}"/>
+                                         {% endwith %}
+
+{#                                    {% endif %}#}
+{#                                      {{ social }}#}
                                         <label>Instagram<span class="dec-icon"><i class="fab fa-instagram"></i>
                                             </span></label>
-                                        <input type="text" placeholder="https://www.instagram.com/" value=""/>
-                                        <label>Vkontakte<span class="dec-icon"><i class="fab fa-vk"></i> </span></label>
-                                        <input type="text" placeholder="https://vk.com/" value=""/>
+                                        {% with socialmedia=form.instance.socialmedia.first %}
+
+                                        <input type="text" name="instagram" placeholder="" value="{{ socialmedia.instagram }}"/>
+                                     {% endwith %}
+                                        <label>Linkdin<span class="dec-icon"><i class="fab fa-vk"></i> </span></label>
+                                    {% with socialmedia=form.instance.socialmedia.first %}
+                                        <input type="text" name = "linkedin" placeholder="" value="{{ socialmedia.linkedin }}"/>
+                                    {% endwith %}
                                         <button class="btn    color-bg  float-btn">Save Changes</button>
                                     </div>
+                                        </form>
                                 </div>
                             </div>
                         </div>
@@ -599,6 +628,103 @@
     <script src="{% static 'js/plugins.js' %}"></script>
     <script src="{% static 'js/scripts.js' %}"></script>
     <script src="{% static 'js/dashboard.js' %}"></script>
+<script>
+    $(document).ready(function() {
+    $('#socialmedia-form').on('submit', function(event) {
+        event.preventDefault();
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function(data) {
+                if (data.success) {
+                    alert('Social media saved successfully.');
+                } else {
+                    alert('There was an error saving social media.');
+                }
+            },
+            error: function() {
+                alert('There was an error saving social media.');
+            }
+        });
+    });
+});
+
+    $(document).ready(function() {
+    $('#user-form').on('submit', function(event) {
+        event.preventDefault();
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function(data) {
+                if (data.success) {
+                    alert('profile updated saved successfully.');
+                } else {
+                    alert('There was an error saving profile.');
+                }
+            },
+            error: function() {
+                alert('There was an error saving profile.');
+            }
+        });
+    });
+});
+$('#change-password-form').submit(function(event) {
+    event.preventDefault();
+    $.ajax({
+        url: $(this).attr('action'),
+        type: 'post',
+        data: $(this).serialize(),
+        success: function(data) {
+            if (data.success) {
+                alert('Password changed successfully.');
+            }
+            if(data.error === false) {
+                alert(data.message);
+            }
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            // Handle error
+            alert('Error: ' + errorThrown);
+        }
+    });
+});
+
+
+$(document).ready(function() {
+    $('#update-profile-form').submit(function(e) {
+        e.preventDefault();
+        var form = $(this);
+        $.ajax({
+            type: form.attr('method'),
+            url: form.attr('action'),
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                if (data.success) {
+                    alert('Profile updated successfully!');
+                    window.location.reload();
+                    {#window.location.href = '{% url "my_profile" %}';#}
+                } else {
+                    alert('An error occurred.');
+                }
+            },
+            error: function(data) {
+                if (data.responseJSON) {
+                    var errors = data.responseJSON.errors;
+                    // Display errors to the user
+                } else {
+                    alert('An error occurred.');
+                }
+            }
+        });
+    });
+});
+
+
+</script>
 </body>
 
 </html>

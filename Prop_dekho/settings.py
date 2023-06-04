@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'chartjs',
+    'multiupload',
     'main',
     'constance',
     'ckeditor',
@@ -62,9 +64,9 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    # 'django_auto_logout.middleware.auto_logout',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
 ROOT_URLCONF = 'Prop_dekho.urls'
 AUTH_USER_MODEL = 'main.User'
 
@@ -80,6 +82,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # 'django_auto_logout.context_processors.auto_logout_client',
+
             ],
         },
     },
@@ -160,3 +164,8 @@ if not DEBUG:
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static/'),
 ]
+
+# AUTO_LOGOUT = {
+#     'SESSION_TIME': 3600,
+#     'MESSAGE': 'The session has expired. Please login again to continue.',
+# }
