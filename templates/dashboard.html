@@ -1,386 +1,83 @@
+{% extends 'user-navbar.html' %}
 {% load static %}
-<!DOCTYPE HTML>
-<html lang="en">
-    <head>
-        <!--=============== basic  ===============-->
-        <meta charset="UTF-8">
-        <title>Homeradar - Real Estate Listing Template</title>
-        <meta name="robots" content="index, follow"/>
-        <meta name="keywords" content=""/>
-        <meta name="description" content=""/>
-        <!--=============== css  ===============-->
-        <link type="text/css" rel="stylesheet" href="{% static 'css/plugins.css' %}">
-        <link type="text/css" rel="stylesheet" href="{% static 'css/style.css' %}">
-        <link type="text/css" rel="stylesheet" href="{% static 'css/dashboard-style.css' %}">
-		<link type="text/css" rel="stylesheet" href="{% static 'css/dark-style.css' %}">
-        <link type="text/css" rel="stylesheet" href="{% static 'css/color.css' %}">
-        <!--=============== favicons ===============-->
-        <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
-    </head>
-    <body>
-        <!--loader-->
-        <div class="loader-wrap">
-            <div class="loader-inner">
-                <svg>
-                    <defs>
-                        <filter id="goo">
-                            <fegaussianblur in="SourceGraphic" stdDeviation="2" result="blur" />
-                            <fecolormatrix in="blur"  values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 5 -2" result="gooey" />
-                            <fecomposite in="SourceGraphic" in2="gooey" operator="atop"/>
-                        </filter>
-                    </defs>
-                </svg>
-            </div>
-        </div>
-        <!--loader end-->
-        <!-- main -->
-        <div id="main">
-            <!-- header -->
-            <header class="main-header">
-                <!--  logo  -->
-                <div class="logo-holder"><a href="{% url 'index'%}"><img src="{% static 'images/logo.png' %}" alt=""></a></div>
-                <!-- logo end  -->
-                <!-- nav-button-wrap-->
-                <div class="nav-button-wrap color-bg nvminit">
-                    <div class="nav-button">
-                        <span></span><span></span><span></span>
-                    </div>
-                </div>
-                <!-- nav-button-wrap end-->
-                <!-- header-search button  -->
-                <div class="header-search-button">
-                    <i class="fal fa-search"></i>
-                    <span>Search...</span>
-                </div>
-                <!-- header-search button end  -->
-                <!--  add new  btn -->
-                <div class="add-list_wrap">
-                    <a href="dashboard-add-listing.html" class="add-list color-bg"><i class="fal fa-plus"></i> <span>Add Listing</span></a>
-                </div>
-                <!--  add new  btn end -->
-
-                <!--  cart-btn   -->
-                <div class="cart-btn  tolt show-header-modal" data-microtip-position="bottom"  data-tooltip="Your Wishlist / Compare">
-                    <i class="fal fa-bell"></i>
-                    <span class="cart-btn_counter color-bg">5</span>
-                </div>
-                <!--  cart-btn end -->
-                <!--  login btn -->
-                {% if user.image %}
-                    <div class="show-reg-form dasbdord-submenu-open"><img src="{{ user.image.url }}" alt=""></div>
-                {% else %}
-                    <div class="show-reg-form dasbdord-submenu-open"><img src="{% static 'images/avatar/1.jpg' %}"
-                                                                          alt=""></div>
-                {% endif %}
-                <!--  login btn  end -->
-                <!--  dashboard-submenu-->
-                <div class="dashboard-submenu">
-
-                    <div class="dashboard-submenu-title fl-wrap">Welcome , <span>{{ user.username }}</span></div>
-                    <ul>
-                        <li><a href="{% url 'dashboard' %}"><i class="fal fa-chart-line"></i>Dashboard</a></li>
-                        <li><a href="dashboard-add-listing.html"> <i class="fal fa-file-plus"></i>Add Listing</a></li>
-                        <li><a href="dashboard-myprofile.html"><i class="fal fa-user-edit"></i>Settings</a></li>
-                    </ul>
-                  {%if request.user.is_authenticated%}
-                    <a href="{% url 'logout' %}" class="color-bg db_log-out"><i class="far fa-power-off"></i> Log Out</a>
-                    {% endif %}
-                </div>
-                <!--  dashboard-submenu  end -->
-                <!--  navigation -->
-                <div class="nav-holder main-menu">
-                    <nav>
-                        <ul class="no-list-style">
-                            {% load mptt_tags %}
-
-                    {% recursetree genres %}
-                        <li>
-                        <a href="#" class="">
-                            {{ node.name }}{% if node.is_root_node %} <i class="fa fa-caret-down">   </i>{% endif %}
-                        </a>
-
-                        {% if not node.is_leaf_node %}
-                            <!--second level -->
-
-                            <ul class="">
-                                {% for child in node.get_children %}
-                                     {% if node.name == child.parent.name %}
-                                    <li>
-                                        {% url child.urls as child_url %}
-                                        {% if child_url %}
-                                            <a href="{{ child_url }}">{{ child.name }}</a>
-                                        {% else %}
-                                            {% comment %} Redirect to the index page if URL pattern is not found {% endcomment %}
-                                            {% with 'not_fount' as index_url %}
-                                                {% url index_url as url %}
-                                                {% if url %}
-                                                    <a href="{{ url }}">{{ child.name }}</a>
-                                                {% endif %}
-                                            {% endwith %}
-                                        {% endif %}
-                                    </li>
-                                     {% endif %}
-                                {% endfor %}
-                            </ul>
-
-                        {% endif %}
-                        </li>
-                    {% endrecursetree %}
-                            </li>
-
-                        </ul>
-                    </nav>
-                </div>
-                <!-- navigation  end -->
-                <!-- header-search-wrapper -->
-                <div class="header-search-wrapper novis_search">
-                    <div class="header-serach-menu">
-                        <div class="custom-switcher fl-wrap">
-                            <div class="fieldset fl-wrap">
-                                <input type="radio" name="duration-1"  id="buy_sw" class="tariff-toggle" checked>
-                                <label for="buy_sw">Buy</label>
-                                <input type="radio" name="duration-1" class="tariff-toggle"  id="rent_sw">
-                                <label for="rent_sw" class="lss_lb">Rent</label>
-                                <span class="switch color-bg"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="custom-form">
-                        <form method="post"  name="registerform">
-                            <label>Keywords </label>
-                            <input type="text" placeholder="Address , Street , State..." value=""/>
-                            <label >Categories</label>
-                            <select data-placeholder="Categories" class="chosen-select on-radius no-search-select" >
-                                <option>All Categories</option>
-                                <option>House</option>
-                                <option>Apartment</option>
-                                <option>Hotel</option>
-                                <option>Villa</option>
-                                <option>Office</option>
-                            </select>
-                            <label style="margin-top:10px;" >Price Range</label>
-                            <div class="price-rage-item fl-wrap">
-                                <input type="text" class="price-range" data-min="100" data-max="100000"  name="price-range1"  data-step="1" value="1" data-prefix="₹">
-                            </div>
-                            <button onclick="location.href='listing.html'" type="button"  class="btn float-btn color-bg"><i class="fal fa-search"></i> Search</button>
-                        </form>
-                    </div>
-                </div>
-                <!-- header-search-wrapper end  -->
-                <!-- wishlist-wrap-->
-                <div class="header-modal novis_wishlist tabs-act">
-                    <ul class="tabs-menu fl-wrap no-list-style">
-                        <li class="current"><a href="#tab-wish">  Wishlist <span>- 3</span></a></li>
-                        <li><a href="#tab-compare">  Compare <span>- 2</span></a></li>
-                    </ul>
-                    <!--tabs -->
-                    <div class="tabs-container">
-                        <div class="tab">
-                            <!--tab -->
-                            <div id="tab-wish" class="tab-content first-tab">
-                                <!-- header-modal-container-->
-                                <div class="header-modal-container scrollbar-inner fl-wrap" data-simplebar>
-                                    <!--widget-posts-->
-                                    <div class="widget-posts  fl-wrap">
-                                        <ul class="no-list-style">
-                                            <li>
-                                                <div class="widget-posts-img"><a href="listing-single.html"><img src="{% static 'images/all/small/1.jpg'%}" alt=""></a>
-                                                </div>
-                                                <div class="widget-posts-descr">
-                                                    <h4><a href="listing-single.html">Affordable Urban Room</a></h4>
-                                                    <div class="geodir-category-location fl-wrap"><a href="#"><i class="fas fa-map-marker-alt"></i> 40 Journal Square  , NJ, USA</a></div>
-                                                    <div class="widget-posts-descr-price"><span>Price: </span> ₹ 1500 / per month</div>
-                                                    <div class="clear-wishlist"><i class="fal fa-trash-alt"></i></div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="widget-posts-img"><a href="listing-single.html"><img src="{% static 'images/all/small/1.jpg'%}" alt=""></a>
-                                                </div>
-                                                <div class="widget-posts-descr">
-                                                    <h4><a href="listing-single.html">Family House</a></h4>
-                                                    <div class="geodir-category-location fl-wrap"><a href="#"><i class="fas fa-map-marker-alt"></i> 34-42 Montgomery St , NY, USA</a></div>
-                                                    <div class="widget-posts-descr-price"><span>Price: </span> ₹ 50.000</div>
-                                                    <div class="clear-wishlist"><i class="fal fa-trash-alt"></i></div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="widget-posts-img"><a href="listing-single.html"><img src="{% static 'images/all/small/1.jpg'%}" alt=""></a>
-                                                </div>
-                                                <div class="widget-posts-descr">
-                                                    <h4><a href="listing-single.html">Apartment to Rent</a></h4>
-                                                    <div class="geodir-category-location fl-wrap"><a href="#"><i class="fas fa-map-marker-alt"></i>75 Prince St, NY, USA</a></div>
-                                                    <div class="widget-posts-descr-price"><span>Price: </span> ₹100 / per night</div>
-                                                    <div class="clear-wishlist"><i class="fal fa-trash-alt"></i></div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <!-- widget-posts end-->
-                                </div>
-                                <!-- header-modal-container end-->
-                                <div class="header-modal-top fl-wrap">
-                                    <div class="clear_wishlist color-bg"><i class="fal fa-trash-alt"></i> Clear all</div>
-                                </div>
-                            </div>
-                            <!--tab end -->
-                            <!--tab -->
-                            <div class="tab">
-                                <div id="tab-compare" class="tab-content">
-                                    <!-- header-modal-container-->
-                                    <div class="header-modal-container scrollbar-inner fl-wrap" data-simplebar>
-                                        <!--widget-posts-->
-                                        <div class="widget-posts  fl-wrap">
-                                            <ul class="no-list-style">
-                                                <li>
-                                                    <div class="widget-posts-img"><a href="listing-single.html"><img src="{% static 'images/all/small/1.jpg'%}" alt=""></a>
-                                                    </div>
-                                                    <div class="widget-posts-descr">
-                                                        <h4><a href="listing-single.html">Gorgeous house for sale</a></h4>
-                                                        <div class="geodir-category-location fl-wrap"><a href="#"><i class="fas fa-map-marker-alt"></i>  70 Bright St New York, USA </a></div>
-                                                        <div class="widget-posts-descr-price"><span>Price: </span> ₹ 52.100</div>
-                                                        <div class="clear-wishlist"><i class="fal fa-trash-alt"></i></div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="widget-posts-img"><a href="listing-single.html"><img src="{% static 'images/all/small/1.jpg'%}" alt=""></a>
-                                                    </div>
-                                                    <div class="widget-posts-descr">
-                                                        <h4><a href="listing-single.html">Family Apartments</a></h4>
-                                                        <div class="geodir-category-location fl-wrap"><a href="#"><i class="fas fa-map-marker-alt"></i> W 85th St, New York, USA </a></div>
-                                                        <div class="widget-posts-descr-price"><span>Price: </span> ₹ 72.400</div>
-                                                        <div class="clear-wishlist"><i class="fal fa-trash-alt"></i></div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <!-- widget-posts end-->
-                                    </div>
-                                    <!-- header-modal-container end-->
-                                    <div class="header-modal-top fl-wrap">
-                                        <a class="clear_wishlist color-bg" href="compare.html"><i class="fal fa-random"></i> Compare</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--tab end -->
-                        </div>
-                        <!--tabs end -->
-                    </div>
-                </div>
-
-            </header>
-            <!-- header end  -->
+{% block content %}
             <!-- wrapper  -->
-            <div id="wrapper">
+    <div id="wrapper">
                 <!-- dashbard-menu-wrap -->
-                <div class="dashbard-menu-overlay"></div>
-                <div class="dashbard-menu-wrap">
-                    <div class="dashbard-menu-close"><i class="fal fa-times"></i></div>
-                    <div class="dashbard-menu-container">
-                        <!-- user-profile-menu-->
-                        <div class="user-profile-menu">
-                            <h3>Main</h3>
-                            <ul class="no-list-style">
-                                <li><a href="{% url 'dashboard' %}" class="user-profile-act"><i class="fal fa-chart-line"></i>Dashboard</a></li>
-                                <li><a href="{% url 'edit_user' pk=user.pk %}"><i class="fal fa-user-edit"></i> Edit profile</a></li>
-                                <li><a href="dashboard-messages.html"><i class="fal fa-envelope"></i> Messages <span>3</span></a></li>
-                                <li><a href="dashboard-agents.html"><i class="fal fa-users"></i> Agents List</a></li>
-                                <li>
-                                    <a href="#" class="submenu-link"><i class="fal fa-plus"></i>Submenu</a>
-                                    <ul  class="no-list-style">
-                                        <li><a href="#"><i class="fal fa-th-list"></i> Submenu 2 </a></li>
-                                        <li><a href="#"> <i class="fal fa-calendar-check"></i> Submenu 2</a></li>
-                                        <li><a href="#"><i class="fal fa-comments-alt"></i>Submenu 2</a></li>
-                                        <li><a href="#"><i class="fal fa-file-plus"></i> Submenu 2</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- user-profile-menu end-->
-                        <!-- user-profile-menu-->
-                        <div class="user-profile-menu">
-                            <h3>Listings</h3>
-                            <ul  class="no-list-style">
-                                <li><a href="dashboard-listing-table.html"><i class="fal fa-th-list"></i> My listigs  </a></li>
-                                <li><a href="dashboard-bookings.html"> <i class="fal fa-calendar-check"></i> Bookings <span>2</span></a></li>
-                                <li><a href="dashboard-review.html"><i class="fal fa-comments-alt"></i> Reviews </a></li>
-                                <li><a href="dashboard-add-listing.html"><i class="fal fa-file-plus"></i> Add New</a></li>
-                            </ul>
-                        </div>
-                        <!-- user-profile-menu end-->
-                    </div>
-                    <div class="dashbard-menu-footer">© Homeradar 2022 .  All rights reserved.</div>
-                </div>
-                <!-- dashbard-menu-wrap end  -->
-                <!-- content -->
-                <div class="dashboard-content">
-                    <div class="dashboard-menu-btn color-bg"><span><i class="fas fa-bars"></i></span>Dasboard Menu</div>
-                    <div class="container dasboard-container">
-                        <!-- dashboard-title -->
-                        <div class="dashboard-title fl-wrap">
-                            <div class="dashboard-title-item"><span>Dashboard</span></div>
-                            <div class="dashbard-menu-header">
-                                <div class="dashbard-menu-avatar fl-wrap">
-                                    {% if user.image %}
-                                    <img src="{{ user.image.url }}" alt="">
-                                    {% else %}
-                                         <img src="{% static 'images/avatar/1.jpg' %}" alt="">
-                                    {% endif %}
-                                    <h4>Welcome, <span>{{ user.username }}</span></h4>
-                                </div>
-                                 {%if request.user.is_authenticated%}
+        <div class="dashbard-menu-overlay"></div>
+        {% block manu %}
 
-                                <a href="{% url 'logout' %}" class="log-out-btn   tolt" data-microtip-position="bottom"  data-tooltip="Log Out"><i class="far fa-power-off"></i></a>
-                                {% endif %}
-                            </div>
+            <div class="dashboard-content">
+            <div class="dashboard-menu-btn color-bg"><span><i class="fas fa-bars"></i></span>Dasboard Menu</div>
+            <div class="container dasboard-container">
+                        <!-- dashboard-title -->
+                <div class="dashboard-title fl-wrap">
+                    <div class="dashboard-title-item"><span>Dashboard</span></div>
+                    <div class="dashbard-menu-header">
+                        <div class="dashbard-menu-avatar fl-wrap">
+                            {% if user.image %}
+                                <img src="{{ user.image.url }}" alt="">
+                            {% else %}
+                                <img src="{% static 'images/avatar/1.jpg' %}" alt="">
+                            {% endif %}
+                            <h4>Welcome, <span>{{ user.username }}</span></h4>
+                        </div>
+                        {%if request.user.is_authenticated%}
+
+                            <a href="{% url 'logout' %}" class="log-out-btn   tolt" data-microtip-position="bottom"  data-tooltip="Log Out"><i class="far fa-power-off"></i></a>
+                        {% endif %}
+                    </div>
                             <!--Tariff Plan menu-->
-                            <div class="tfp-det-container">
-                                <div   class="tfp-btn"><span>Your Tariff Plan : </span> <strong>Extended</strong></div>
-                                <div class="tfp-det">
-                                    <p>You Are on <a href="#">Extended</a> . Use link bellow to view details or upgrade. </p>
-                                    <a href="#" class="tfp-det-btn color-bg">Details</a>
+                    <div class="tfp-det-container">
+                        <div   class="tfp-btn"><span>Your Tariff Plan : </span> <strong>Extended</strong></div>
+                        <div class="tfp-det">
+                            <p>You Are on <a href="#">Extended</a> . Use link bellow to view details or upgrade. </p>
+                            <a href="#" class="tfp-det-btn color-bg">Details</a>
+                        </div>
+                    </div>
+                            <!--Tariff Plan menu end-->
+                </div>
+                        <!-- dashboard-title end -->
+                <div class="dasboard-wrapper fl-wrap no-pag">
+                    <div class="dashboard-stats-container fl-wrap">
+                        <div class="row">
+                                    <!--dashboard-stats-->
+                            <div class="col-md-3">
+                                <div class="dashboard-stats fl-wrap">
+                                    <i class="fal fa-map-marked"></i>
+
+                                    <h4>Active Listings</h4>
+                                    <div class="dashboard-stats-count">{{ listing }}</div>
+
                                 </div>
                             </div>
-                            <!--Tariff Plan menu end-->
-                        </div>
-                        <!-- dashboard-title end -->
-                        <div class="dasboard-wrapper fl-wrap no-pag">
-                            <div class="dashboard-stats-container fl-wrap">
-                                <div class="row">
-                                    <!--dashboard-stats-->
-                                    <div class="col-md-3">
-                                        <div class="dashboard-stats fl-wrap">
-                                            <i class="fal fa-map-marked"></i>
-                                            <h4>Active Listings</h4>
-                                            <div class="dashboard-stats-count">124</div>
-                                        </div>
-                                    </div>
                                     <!-- dashboard-stats end -->
                                     <!--dashboard-stats-->
-                                    <div class="col-md-3">
-                                        <div class="dashboard-stats fl-wrap">
-                                            <i class="fal fa-chart-bar"></i>
-                                            <h4>Listing Views</h4>
-                                            <div class="dashboard-stats-count">1056<span>(<strong>+356</strong> this week)</span></div>
-                                        </div>
-                                    </div>
+                            <div class="col-md-3">
+                                <div class="dashboard-stats fl-wrap">
+                                    <i class="fal fa-chart-bar"></i>
+                                    <h4>Listing Views</h4>
+                                    <div class="dashboard-stats-count">44<span>(<strong>+356</strong> this week)</span></div>
+                                </div>
+                            </div>
                                     <!-- dashboard-stats end -->
                                     <!--dashboard-stats-->
-                                    <div class="col-md-3">
-                                        <div class="dashboard-stats fl-wrap">
-                                            <i class="fal fa-comments-alt"></i>
-                                            <h4>Your Reviews</h4>
-                                            <div class="dashboard-stats-count">357<span>(<strong>+12</strong> this week)</span></div>
-                                        </div>
-                                    </div>
+                            <div class="col-md-3">
+                                <div class="dashboard-stats fl-wrap">
+                                    <i class="fal fa-comments-alt"></i>
+                                    <h4>Your Reviews</h4>
+                                    <div class="dashboard-stats-count">357<span>(<strong>+12</strong> this week)</span></div>
+                                </div>
+                            </div>
                                     <!-- dashboard-stats end -->
                                     <!--dashboard-stats-->
-                                    <div class="col-md-3">
-                                        <div class="dashboard-stats fl-wrap">
-                                            <i class="fal fa-heart"></i>
-                                            <h4>Times Bookmarked</h4>
-                                            <div class="dashboard-stats-count">2329<span>(<strong>+234</strong> this week)</span></div>
-                                        </div>
-                                    </div>
+                            <div class="col-md-3">
+                                <div class="dashboard-stats fl-wrap">
+                                    <i class="fal fa-heart"></i>
+                                    <h4>Times Bookmarked</h4>
+                                    <div class="dashboard-stats-count">{{ booking }}<span>(<strong>+234</strong> this week)</span></div>
+                                </div>
+                            </div>
                                     <!-- dashboard-stats end -->
                                 </div>
                             </div>
@@ -539,7 +236,7 @@
                                     <div class="box-widget fl-wrap">
                                         <div class="banner-widget fl-wrap">
                                             <div class="bg-wrap bg-parallax-wrap-gradien">
-                                                <div class="bg  "  data-bg="{% static 'images/all/blog/1.jpg'%}"></div>
+                                                <div class="bg  "  data-bg="{%static 'images/all/blog/1.jpg'%}"></div>
                                             </div>
                                             <div class="banner-widget_content">
                                                 <h5>Participate in our loyalty program. Refer a friend and get a discount.</h5>
@@ -547,38 +244,11 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!--box-widget end --> 								
+                                    <!--box-widget end -->
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- dashboard-footer -->
-                    <div class="dashboard-footer">
-                        <div class="dashboard-footer-links fl-wrap">
-                            <span>Helpfull Links:</span>
-                            <ul>
-                                <li><a href="{% url 'about' %}">About  </a></li>
-                                <li><a href="{% url 'blog' %}">Blog</a></li>
-                                <li><a href="pricing.html">Pricing Plans</a></li>
-                                <li><a href="contacts.html">Contacts</a></li>
-                                <li><a href="help.html">Help Center</a></li>
-                            </ul>
-                        </div>
-                        <a href="#main" class="dashbord-totop  custom-scroll-link"><i class="fas fa-caret-up"></i></a>
-                    </div>
-                    <!-- dashboard-footer end -->
-                </div>
-                <!-- content end -->
-                <div class="dashbard-bg gray-bg"></div>
-            </div>
-            <!-- wrapper end -->
-        </div>
-        <!-- Main end -->
-        <!--=============== scripts  ===============-->
-         <script src="{% static 'js/jquery.min.js' %}"></script>
-        <script src="{% static 'js/plugins.js' %}"></script>
-        <script src="{% static 'js/scripts.js' %}"></script>
-        <script src="{% static 'js/charts.js' %}"></script>
-        <script src="{% static 'js/dashboard.js' %}"></script>
-    </body>
-</html>
+{% endblock %}
+{% endblock %}

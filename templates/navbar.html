@@ -18,7 +18,9 @@
 
 <header class="main-header">
     <!--  logo  -->
-    <div class="logo-holder"><a href="{% url 'index' %}"><img src="{% static 'images/logo.png' %}" alt=""></a></div>
+    <div class="logo-holder"><a href="{% url 'index' %}" class="load-data"><img src="{% static 'images/logo.png' %}" alt=""></a></div>
+{# <a href="#" class="load-data">Load Data</a>#}
+
     <!-- logo end  -->
     <!-- nav-button-wrap-->
     <div class="nav-button-wrap color-bg nvminit">
@@ -35,7 +37,7 @@
     <!-- header-search button end  -->
     <!--  add new  btn -->
     <div class="add-list_wrap">
-        <a href="{% url 'add' %}" class="add-list color-bg"><i class="fal fa-plus"></i> <span>Add
+        <a href="{% url 'add_listing' %}" class="add-list color-bg"><i class="fal fa-plus"></i> <span>Add
                         Listing</span></a>
     </div>
     <!--  add new  btn end -->
@@ -49,7 +51,14 @@
     </div>
     <!--  cart-btn end -->
     <!--  login btn -->
-    <div class="show-reg-form modal-open"><i class="fas fa-user"></i><span>Sign In</span></div>
+    {% if request.user.is_authenticated %}
+        <a href="{% url 'logout' %}">
+        <div class="show-reg-form "> <i class="far fa-power-off"></i><span>Logout</span></div>
+        </a>
+
+    {% else %}
+        <div class="show-reg-form modal-open"><i class="fas fa-user"></i><span>Sign In</span></div>
+    {% endif %}
     <!--  login btn  end -->
     <!--  navigation -->
     <div class="nav-holder main-menu">
@@ -121,37 +130,35 @@
         <div class="header-serach-menu">
             <div class="custom-switcher fl-wrap">
                 <div class="fieldset fl-wrap">
-                    <input type="radio" name="duration-1" id="buy_sw" class="tariff-toggle" checked>
-                    <label for="buy_sw">Buy</label>
-                    <input type="radio" name="duration-1" class="tariff-toggle" id="rent_sw">
+                    <input type="radio" name="type" id="buy_sw" class="tariff-toggle" checked >
+                    <label for="buy_sw">Sale</label>
+                    <input type="radio" name="type" class="tariff-toggle" id="rent_sw">
                     <label for="rent_sw" class="lss_lb">Rent</label>
                     <span class="switch color-bg"></span>
                 </div>
             </div>
+
         </div>
         <div class="custom-form">
-            <form method="post" name="registerform">
-                <label>Keywords </label>
-                <input type="text" placeholder="Address , Street , State..." value=""/>
-                <label>Categories</label>
-                <select data-placeholder="Categories" class="chosen-select on-radius no-search-select">
-                    <option>All Categories</option>
-                    <option>House</option>
-                    <option>Apartment</option>
-                    <option>Hotel</option>
-                    <option>Villa</option>
-                    <option>Office</option>
-                </select>
-                <label style="margin-top:10px;">Price Range</label>
-                <div class="price-rage-item fl-wrap">
-                    <input type="text" class="price-range" data-min="100" data-max="100000" name="price-range1"
-                           data-step="1" value="1" data-prefix="₹">
-                </div>
-                <button onclick="location.href='listing.html'" type="button" class="btn float-btn color-bg"><i
-                        class="fal fa-search"></i> Search
-                </button>
-            </form>
-        </div>
+  <form method="get" action="{% url 'search_results' %}">
+    <label>Keywords</label>
+    <input type="text" placeholder="Address, Street, State..." name="query" value="{{ request.GET.query }}">
+    <label>Categories</label>
+    <select name="category" data-placeholder="Categories" class="chosen-select on-radius no-search-select">
+{#      <option value="">All Categories</option>#}
+      {% for category in categories %}
+        <option value="{{ category.id }}">{{ category.name }}</option>
+      {% endfor %}
+    </select>
+    <label style="margin-top:10px;">Price Range</label>
+    <div class="price-rage-item fl-wrap">
+        <input type="text" class="price-range" data-min="100" data-max="100000" name="price-range" data-step="1" value="50-100000" data-prefix="₹">
+
+    </div>
+    <button type="submit" class="btn float-btn color-bg"><i class="fal fa-search"></i> Search</button>
+  </form>
+</div>
+
     </div>
     <!-- header-search-wrapper end  -->
     <!-- wishlist-wrap-->
@@ -306,5 +313,6 @@
     </div>
     <!--header-opt-modal end -->
 </header>
+
 
 

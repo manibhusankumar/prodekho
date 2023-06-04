@@ -76,7 +76,7 @@
         //     return false;
         // }
 
-        if(passw.length < 8 || passw.length > 25){
+        if(passw.length < 4 || passw.length > 25){
             document.getElementById('password').innerHTML = "** Password length must be between 8 and 25";
             return false;
         }
@@ -100,6 +100,22 @@
         //     return false;
         // }
     }
+
+
+    $('.bookingBtn').on('click', function(e){
+        // Get the ID of the button that was clicked
+        let id = $(this).attr('data-id');
+        let title = $('.get_title_'+id).text();
+        $('input[name="listing"]').val(id);
+        $('.set_title').html(title);
+        // Show the contact modal
+        $('#contactModal').modal('show');
+
+    });
+
+    $('.btn-close').on('click', function(e){
+        $('#contactModal').modal('hide');
+    });
 </script>
 
 </html>
